@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [B2bua-users] *b2bua not cutting off the call when credit goes	to zero
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/b2bua-users/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20%2Ab2bua%20not%20cutting%20off%20the%20call%20when%20credit%20goes%0A%09to%20zero&In-Reply-To=%3C2510573836.20070216104624%40yes.net.ua%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000003.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[B2bua-users] *b2bua not cutting off the call when credit goes	to zero</H1>
+    <B>Mike Tkachuk</B> 
+    <A HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20%2Ab2bua%20not%20cutting%20off%20the%20call%20when%20credit%20goes%0A%09to%20zero&In-Reply-To=%3C2510573836.20070216104624%40yes.net.ua%3E"
+       TITLE="[B2bua-users] *b2bua not cutting off the call when credit goes	to zero">mike at yes.net.ua
+       </A><BR>
+    <I>Fri Feb 16 09:46:24 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000003.html">[B2bua-users] *b2bua not cutting off the call when credit goes	to zero
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4">[ date ]</a>
+              <a href="thread.html#4">[ thread ]</a>
+              <a href="subject.html#4">[ subject ]</a>
+              <a href="author.html#4">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello manjula,
+
+Please be sure that you have all this attributes (h323-credit-time
+etc) in your *B2BUA dictionary file.
+
+Thursday, February 15, 2007 5:34:02 PM, you wrote:
+
+mh&gt; Hello Mike
+
+mh&gt; As your advised I replaced 
+
+mh&gt; $data{'session_timeout'} =
+$r-&gt;&gt;get_hashattribute('Session-Timeout') + 0;
+
+mh&gt; with 
+mh&gt; $data{'session_timeout'} =
+$r-&gt;&gt;get_hashattribute('h323-credit-time');
+mh&gt; $data{'session_timeout'} =~ s/h323-credit-time=//;
+
+mh&gt; Also I can see Radius is sending 
+mh&gt; Thu Feb 15 15:24:30 2007
+mh&gt;         h323-credit-time = &quot;h323-credit-time=23932&quot;
+mh&gt;         h323-credit-amount = &quot;h323-credit-amount=3.99&quot;
+mh&gt;         h323-currency = &quot;h323-currency=USD&quot;
+mh&gt;         h323-billing-model = &quot;h323-billing-model=2&quot;
+mh&gt;         h323-return-code = &quot;h323-return-code=0&quot;
+mh&gt;         Timestamp = 1171553070
+
+
+mh&gt; But I can trace from b2bua.pl that 
+mh&gt; $data{'session_timeout'} returns &lt;BLANK&gt;
+
+mh&gt; Any idear is appreciated
+
+mh&gt; Thanks in advance
+
+mh&gt; Manjula
+
+mh&gt; --- Mike Tkachuk &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">mike at yes.net.ua</A>&gt; wrote:
+
+&gt;&gt;<i> Hello manjula,
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i>  For *B2BUA the correct way of returning a session
+</I>&gt;&gt;<i> timeout is using a
+</I>&gt;&gt;<i>  Session-Timeout attribute, not h323-credit-time.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Thursday, February 15, 2007 10:26:17 AM, you wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> mh&gt; Hi
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> mh&gt; I am using b2bua-0.2.0b2 with  asterisk-1.2.11. 
+</I>&gt;&gt;<i> mh&gt; Authentication, Autherization and accounting is
+</I>&gt;&gt;<i> mh&gt; working ok. 
+</I>&gt;&gt;<i> mh&gt;  However we have seen that calls do not get cut
+</I>&gt;&gt;<i> off
+</I>&gt;&gt;<i> mh&gt; when credit goes minus.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> mh&gt; I can see radius sending correct Auth-reply
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> mh&gt; Thu Feb 15 08:03:08 2007
+</I>&gt;&gt;<i> mh&gt;         h323-credit-time = &quot;h323-credit-time=60&quot;
+</I>&gt;&gt;<i> mh&gt;         h323-credit-amount =
+</I>&gt;&gt;<i> &quot;h323-credit-amount=0.01&quot;
+</I>&gt;&gt;<i> mh&gt;         h323-currency = &quot;h323-currency=USD&quot;
+</I>&gt;&gt;<i> mh&gt;         h323-billing-model =
+</I>&gt;&gt;<i> &quot;h323-billing-model=2&quot;
+</I>&gt;&gt;<i> mh&gt;         h323-return-code = &quot;h323-return-code=0&quot;
+</I>&gt;&gt;<i> mh&gt;         Timestamp = 1171526588
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> mh&gt; Can anyone suggest me a method to troubleshoot
+</I>&gt;&gt;<i> what's
+</I>&gt;&gt;<i> mh&gt; wrong ?
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> mh&gt; Thanks in advance
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> mh&gt; Manjula Hettiarachchi
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> mh&gt;  
+</I>&gt;&gt;<i> mh&gt;
+</I>&gt;&gt;<i>
+</I>mh&gt; ____________________________________________________________________________________
+&gt;&gt;<i> mh&gt; Now that's room service!  Choose from over
+</I>&gt;&gt;<i> 150,000 hotels
+</I>&gt;&gt;<i> mh&gt; in 45,000 destinations on Yahoo! Travel to find
+</I>&gt;&gt;<i> your fit.
+</I>&gt;&gt;<i> mh&gt;
+</I>&gt;&gt;<i> <A HREF="http://farechase.yahoo.com/promo-generic-14795097">http://farechase.yahoo.com/promo-generic-14795097</A>
+</I>&gt;&gt;<i> mh&gt; _______________________________________________
+</I>&gt;&gt;<i> mh&gt; B2bua-users mailing list
+</I>&gt;&gt;<i> mh&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">B2bua-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> mh&gt;
+</I>&gt;&gt;<i>
+</I>mh&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">https://lists.berlios.de/mailman/listinfo/b2bua-users</A>
+&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> --
+</I>&gt;&gt;<i> Mike Tkachuk
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>
+
+
+mh&gt;  
+mh&gt; ____________________________________________________________________________________
+mh&gt; TV dinner still cooling? 
+mh&gt; Check out &quot;Tonight's Picks&quot; on Yahoo! TV.
+mh&gt; <A HREF="http://tv.yahoo.com/">http://tv.yahoo.com/</A>
+
+
+--
+Mike Tkachuk
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000003.html">[B2bua-users] *b2bua not cutting off the call when credit goes	to zero
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4">[ date ]</a>
+              <a href="thread.html#4">[ thread ]</a>
+              <a href="subject.html#4">[ subject ]</a>
+              <a href="author.html#4">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/b2bua-users">More information about the B2bua-users
+mailing list</a><br>
+</body></html>

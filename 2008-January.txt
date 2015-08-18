@@ -1,0 +1,20 @@
+From nhadie at tbgi.net.ph  Sat Jan 19 04:02:37 2008
+From: nhadie at tbgi.net.ph (Nhadie)
+Date: Sat, 19 Jan 2008 11:02:37 +0800
+Subject: [B2bua-users] opensource prepaid system
+Message-ID: <4791684D.3020004@tbgi.net.ph>
+
+Hi,
+
+Has anyone able to use a opensource prepaid system that integrates with 
+ser/freeradius/*b2bua/asterisk?
+
+I want to setup something based from opensource for now as i want to see 
+how it works first to understand more of it. TIA
+
+regards
+
+Nhadie
+
+
+

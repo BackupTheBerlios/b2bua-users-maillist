@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [B2bua-users] 404 not found
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/b2bua-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20404%20not%20found&In-Reply-To=%3C1848040116.20070609122728%40yes.net.ua%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000023.html">
+   <LINK REL="Next"  HREF="000025.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[B2bua-users] 404 not found</H1>
+    <B>Mike Tkachuk</B> 
+    <A HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20404%20not%20found&In-Reply-To=%3C1848040116.20070609122728%40yes.net.ua%3E"
+       TITLE="[B2bua-users] 404 not found">mike at yes.net.ua
+       </A><BR>
+    <I>Sat Jun  9 11:27:28 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000023.html">[B2bua-users] 404 not found
+</A></li>
+        <LI>Next message: <A HREF="000025.html">[B2bua-users] is this project solution for me ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#24">[ date ]</a>
+              <a href="thread.html#24">[ thread ]</a>
+              <a href="subject.html#24">[ subject ]</a>
+              <a href="author.html#24">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Kro,
+
+ Maybe your proxy forwarding not from standard port 5060. Also you can
+ see all necessary debug info by typing &quot;sip debug&quot; in asterisk
+ console.
+
+Saturday, June 9, 2007 10:38:18 AM, you wrote:
+
+KK&gt;   
+KK&gt;  Hi,
+KK&gt;  &#160;
+KK&gt;  It is already my proxy's original address :) It was just an
+KK&gt; example. I'd better paste my configs here. As you can see
+KK&gt; definitions except [sip-in] parts are all default configurtions that come with make samples.
+KK&gt;  &#160;
+KK&gt;  thanks again :)
+KK&gt;  Kro
+KK&gt;  &#160;
+KK&gt;  /******************************sip.conf****************************/
+KK&gt;  [general]
+KK&gt; ;context=default&#160;
+KK&gt; ;allowguest=no&#160;&#160;
+KK&gt; allowoverlap=no&#160;&#160;
+KK&gt; ;allowtransfer=no&#160;&#160;&#160;&#160;
+KK&gt; ;realm=mydomain.tld&#160;&#160;
+KK&gt; ;bindport=5060&#160;&#160;
+KK&gt; ;bindaddr=0.0.0.0&#160;
+KK&gt; ;srvlookup=yes&#160;&#160;
+KK&gt; ;&#160; disallow=all
+KK&gt; ;&#160; allow=ulaw
+KK&gt; ;&#160; allow=alaw&#160; 
+KK&gt; ;&#160; allow=g729
+KK&gt; ;[sip_proxy]
+KK&gt; ;type=peer
+KK&gt; ;context=from-fwd
+KK&gt; ;host=88.248.71.3
+KK&gt; ;canreinvite=no
+KK&gt;  ;[sip_proxy-out]
+KK&gt; ;type=peer&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;
+KK&gt; ;secret=guessit
+KK&gt; ;username=yourusername&#160;&#160;&#160;
+KK&gt; ;fromuser=yourusername&#160;&#160;&#160;
+KK&gt; ;fromdomain=provider.sip.domain&#160;
+KK&gt; ;host=box.provider.com
+KK&gt; ;usereqphone=yes&#160;&#160;&#160;
+KK&gt; ;call-limit=5&#160;&#160;&#160;&#160;
+KK&gt; ;outboundproxy=proxy.provider.domain
+KK&gt; ;port=80&#160;&#160;&#160;&#160;
+KK&gt;  [gncsersip1-in]
+KK&gt; type=peer
+KK&gt; host=88.248.71.3
+KK&gt; context=sip-in
+KK&gt; disallow=all
+KK&gt; allow=g723.1
+KK&gt; allow=g729
+KK&gt; allow=gsm
+KK&gt;  /**********************end of sip.conf***********************/
+
+KK&gt;  &#160;
+KK&gt;  /**********************extensions.conf***********************/
+KK&gt;  [general]
+KK&gt; static=yes
+KK&gt; writeprotect=no
+KK&gt; clearglobalvars=no
+KK&gt;  [globals]
+KK&gt; CONSOLE=Console/dsp
+KK&gt; IAXINFO=guest&#160;&#160;
+KK&gt; TRUNK=Zap/g2&#160;&#160;
+KK&gt; TRUNKMSD=1&#160;&#160;
+switch =&gt;&gt; DUNDi/e164
+exten =&gt;&gt; s,1,Goto(${ARG1},1)
+include =&gt;&gt; dundi-e164-lookup
+KK&gt;  [iaxtel700]
+exten =&gt;&gt; _91700XXXXXXX,1,Dial(IAX2/${GLOBAL(IAXINFO)}@iaxtel.com/${EXTEN:1}@iaxtel)
+KK&gt; [iaxprovider]
+KK&gt; [trunkint]
+exten =&gt;&gt; _9011.,1,Macro(dundi-e164,${EXTEN:4})
+exten =&gt;&gt; _9011.,n,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+KK&gt; [trunkld]
+exten =&gt;&gt; _91NXXNXXXXXX,1,Macro(dundi-e164,${EXTEN:1})
+exten =&gt;&gt; _91NXXNXXXXXX,n,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+KK&gt;  [trunklocal]
+exten =&gt;&gt; _9NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+KK&gt;  [trunktollfree]
+exten =&gt;&gt; _91800NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+exten =&gt;&gt; _91888NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+exten =&gt;&gt; _91877NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+exten =&gt;&gt; _91866NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+KK&gt;  [international]
+ignorepat =&gt;&gt; 9
+include =&gt;&gt; longdistance
+include =&gt;&gt; trunkint
+KK&gt;  [longdistance]
+ignorepat =&gt;&gt; 9
+include =&gt;&gt; local
+include =&gt;&gt; trunkld
+KK&gt;  [local]
+ignorepat =&gt;&gt; 9
+include =&gt;&gt; default
+include =&gt;&gt; trunklocal
+include =&gt;&gt; iaxtel700
+include =&gt;&gt; trunktollfree
+include =&gt;&gt; iaxprovider
+KK&gt;  include =&gt; parkedcalls
+KK&gt;  [macro-trunkdial]
+exten =&gt;&gt; s,1,Dial(${ARG1})
+exten =&gt;&gt; s,n,Goto(s-${DIALSTATUS},1)
+exten =&gt;&gt; s-NOANSWER,1,Hangup
+exten =&gt;&gt; s-BUSY,1,Hangup
+exten =&gt;&gt; _s-.,1,NoOp
+KK&gt;  [macro-stdexten];
+exten =&gt;&gt; s,1,Dial(${ARG2},20)&#160;&#160;
+exten =&gt;&gt; s,2,Goto(s-${DIALSTATUS},1)&#160;&#160;
+exten =&gt;&gt; s-NOANSWER,1,Voicemail(${ARG1},u)&#160;
+exten =&gt;&gt; s-NOANSWER,2,Goto(default,s,1)&#160;&#160;
+exten =&gt;&gt; s-BUSY,1,Voicemail(${ARG1},b)&#160;&#160;
+exten =&gt;&gt; s-BUSY,2,Goto(default,s,1)&#160;&#160;
+exten =&gt;&gt; _s-.,1,Goto(s-NOANSWER,1)&#160;&#160;
+exten =&gt;&gt; a,1,VoicemailMain(${ARG1})&#160;&#160;
+KK&gt;  [macro-stdPrivacyexten];
+exten =&gt;&gt; s,1,Dial(${ARG2},20|p)&#160;&#160;&#160;
+exten =&gt;&gt; s,2,Goto(s-${DIALSTATUS},1)&#160;&#160;
+exten =&gt;&gt; s-NOANSWER,1,Voicemail(${ARG1},u)&#160;
+exten =&gt;&gt; s-NOANSWER,2,Goto(default,s,1)&#160;&#160;
+exten =&gt;&gt; s-BUSY,1,Voicemail(${ARG1},b)&#160;&#160;
+exten =&gt;&gt; s-BUSY,2,Goto(default,s,1)&#160;&#160;
+exten =&gt;&gt; s-DONTCALL,1,Goto(${ARG3},s,1)&#160;&#160;
+exten =&gt;&gt; s-TORTURE,1,Goto(${ARG4},s,1)&#160;&#160;
+exten =&gt;&gt; _s-.,1,Goto(s-NOANSWER,1)&#160;&#160;
+exten =&gt;&gt; a,1,VoicemailMain(${ARG1})&#160;&#160;
+KK&gt;  [macro-page];
+KK&gt;  exten =&gt; s,1,ChanIsAvail(${ARG1}|js)
+exten =&gt;&gt; s,n,GoToIf([${AVAILSTATUS} = &quot;1&quot;]?autoanswer:fail)
+exten =&gt;&gt; s,n(autoanswer),Set(_ALERT_INFO=&quot;RA&quot;)
+exten =&gt;&gt; s,n,SIPAddHeader(Call-Info: Answer-After=0)
+exten =&gt;&gt; s,n,NoOp()
+exten =&gt;&gt; s,n,Dial(${ARG1}||)
+exten =&gt;&gt; s,n(fail),Hangup
+KK&gt;  
+KK&gt; [demo]
+exten =&gt;&gt; s,1,Wait(1)&#160;&#160;&#160;
+exten =&gt;&gt; s,n,Answer&#160;&#160;&#160;
+exten =&gt;&gt; s,n,Set(TIMEOUT(digit)=5)&#160;
+exten =&gt;&gt; s,n,Set(TIMEOUT(response)=10)&#160;
+exten =&gt;&gt; s,n(restart),BackGround(demo-congrats)&#160;
+exten =&gt;&gt; s,n(instruct),BackGround(demo-instruct)
+exten =&gt;&gt; s,n,WaitExten&#160;&#160;&#160;
+exten =&gt;&gt; 2,1,BackGround(demo-moreinfo)&#160;
+exten =&gt;&gt; 2,n,Goto(s,instruct)
+exten =&gt;&gt; 3,1,Set(LANGUAGE()=fr)&#160;&#160;
+exten =&gt;&gt; 3,n,Goto(s,restart)&#160;&#160;
+exten =&gt;&gt; 1000,1,Goto(default,s,1)
+exten =&gt;&gt; 1234,1,Playback(transfer,skip)
+exten =&gt;&gt; 1234,n,Macro(stdexten,1234,${GLOBAL(CONSOLE)})
+exten =&gt;&gt; 1235,1,Voicemail(1234,u)&#160;
+exten =&gt;&gt; 1236,1,Dial(Console/dsp)&#160;
+exten =&gt;&gt; 1236,n,Voicemail(1234,b)&#160;
+exten =&gt;&gt; #,1,Playback(demo-thanks)&#160;
+exten =&gt;&gt; #,n,Hangup&#160;&#160;
+exten =&gt;&gt; t,1,Goto(#,1)&#160;
+exten =&gt;&gt; i,1,Playback(invalid)&#160;&#160;
+exten =&gt;&gt; 500,1,Playback(demo-abouttotry)
+exten =&gt;&gt; 500,n,Dial(IAX2/<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">guest at misery.digium.com</A>/<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">s at default</A>)
+exten =&gt;&gt; 500,n,Playback(demo-nogo)
+exten =&gt;&gt; 500,n,Goto(s,6)&#160;&#160;
+exten =&gt;&gt; 600,1,Playback(demo-echotest)&#160;
+exten =&gt;&gt; 600,n,Echo&#160;&#160;&#160;
+exten =&gt;&gt; 600,n,Playback(demo-echodone)&#160;
+exten =&gt;&gt; 600,n,Goto(s,6)&#160;&#160;
+exten =&gt;&gt; 76245,1,Macro(page,SIP/Grandstream1)
+exten =&gt;&gt; _7XXX,1,Macro(page,SIP/${EXTEN})
+exten =&gt;&gt; 7999,1,Set(TIMEOUT(absolute)=60)
+exten =&gt;&gt; 7999,2,Page(Local/<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">Grandstream1 at page</A>&amp;Local/<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">Xlite1 at page</A>&amp;Local/<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">1234 at page</A>/n|d)
+exten =&gt;&gt; 8500,1,VoicemailMain
+exten =&gt;&gt; 8500,n,Goto(s,6)
+KK&gt;  [page]
+exten =&gt;&gt; _X.,1,Macro(page,SIP/${EXTEN})
+KK&gt;  [default]
+KK&gt;  [sip-in]
+exten =&gt;&gt; _X.,1,DeadAgi(/root/asterisk-b2bua-0.3.0b/b2bua.pl)
+exten =&gt;&gt; _X.,2,Hangup()
+KK&gt;  /**********************end of extensions.conf***********************/
+KK&gt;  
+&gt;&gt;<i> Date: Fri, 8 Jun 2007 19:20:50 +0300
+</I>&gt;&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">mike at yes.net.ua</A>
+</I>&gt;&gt;<i> To: <A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">kro_ser at hotmail.com</A>
+</I>&gt;&gt;<i> Subject: Re[2]: [B2bua-users] 404 not found
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Hello Kro,
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Change host=10.20.30.40 to your actual address of proxy.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Friday, June 8, 2007 6:57:54 PM, you wrote:
+</I>&gt;&gt;<i> 
+</I>
+
+
+KK&gt; MSN Spaces ile web g&#252;nl&#252;&#240;&#252;n&#252;ze do&#240;rudan e-posta g&#246;nderin.
+KK&gt; F&#253;kralar&#253;, foto&#240;raflar&#253; ve daha fazlas&#253;n&#253; kar&#254;&#253;ya y&#252;kleyin. &#220;cretsiz! &#220;cretsiz!
+KK&gt;   
+
+
+--
+Mike Tkachuk
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000023.html">[B2bua-users] 404 not found
+</A></li>
+	<LI>Next message: <A HREF="000025.html">[B2bua-users] is this project solution for me ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#24">[ date ]</a>
+              <a href="thread.html#24">[ thread ]</a>
+              <a href="subject.html#24">[ subject ]</a>
+              <a href="author.html#24">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/b2bua-users">More information about the B2bua-users
+mailing list</a><br>
+</body></html>

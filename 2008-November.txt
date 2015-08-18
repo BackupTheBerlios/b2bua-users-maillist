@@ -1,0 +1,24 @@
+From hoathai at ngt.vn  Wed Nov 12 07:17:49 2008
+From: hoathai at ngt.vn (Hoa Thai Duy (NGT))
+Date: Wed, 12 Nov 2008 13:17:49 +0700
+Subject: [B2bua-users] Asterisk B2BUA patch for 1.6
+Message-ID: <011b01c9448e$63bd87a0$2b3896e0$@vn>
+
+Dear Mike
+
+ 
+
+1.6 ash been released. Do you have plan to release the patch for 1.6?
+
+ 
+
+Brgds
+
+ 
+
+Thai Duy Hoa
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/b2bua-users/attachments/20081112/ba32b4c4/attachment.html>
+

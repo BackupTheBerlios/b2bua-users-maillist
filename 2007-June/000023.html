@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [B2bua-users] 404 not found
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/b2bua-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20404%20not%20found&In-Reply-To=%3CBAY119-W2888A30E72C560276796082240%40phx.gbl%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000022.html">
+   <LINK REL="Next"  HREF="000024.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[B2bua-users] 404 not found</H1>
+    <B>Kro Kamil</B> 
+    <A HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20404%20not%20found&In-Reply-To=%3CBAY119-W2888A30E72C560276796082240%40phx.gbl%3E"
+       TITLE="[B2bua-users] 404 not found">kro_ser at hotmail.com
+       </A><BR>
+    <I>Sat Jun  9 09:38:18 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000022.html">[B2bua-users] 404 not found
+</A></li>
+        <LI>Next message: <A HREF="000024.html">[B2bua-users] 404 not found
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#23">[ date ]</a>
+              <a href="thread.html#23">[ thread ]</a>
+              <a href="subject.html#23">[ subject ]</a>
+              <a href="author.html#23">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi,
+ 
+It is already my proxy's original address :) It was just an example. I'd better paste my configs here. As you can see definitions except [sip-in] parts are all default configurtions that come with make samples.
+ 
+thanks again :)
+Kro
+ 
+/******************************sip.conf****************************/
+[general];context=default ;allowguest=no  allowoverlap=no  ;allowtransfer=no    ;realm=mydomain.tld  ;bindport=5060  ;bindaddr=0.0.0.0 ;srvlookup=yes  ;  disallow=all;  allow=ulaw;  allow=alaw  ;  allow=g729;[sip_proxy];type=peer;context=from-fwd;host=88.248.71.3;canreinvite=no
+;[sip_proxy-out];type=peer             ;secret=guessit;username=yourusername   ;fromuser=yourusername   ;fromdomain=provider.sip.domain ;host=box.provider.com;usereqphone=yes   ;call-limit=5    ;outboundproxy=proxy.provider.domain;port=80    
+[gncsersip1-in]type=peerhost=88.248.71.3context=sip-indisallow=allallow=g723.1allow=g729allow=gsm
+/**********************end of sip.conf***********************/
+ 
+/**********************extensions.conf***********************/
+[general]static=yeswriteprotect=noclearglobalvars=no
+[globals]CONSOLE=Console/dspIAXINFO=guest  TRUNK=Zap/g2  TRUNKMSD=1  switch =&gt; DUNDi/e164exten =&gt; s,1,Goto(${ARG1},1)include =&gt; dundi-e164-lookup
+[iaxtel700]exten =&gt; _91700XXXXXXX,1,Dial(IAX2/${GLOBAL(IAXINFO)}@iaxtel.com/${EXTEN:1}@iaxtel)[iaxprovider][trunkint]exten =&gt; _9011.,1,Macro(dundi-e164,${EXTEN:4})exten =&gt; _9011.,n,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})[trunkld]exten =&gt; _91NXXNXXXXXX,1,Macro(dundi-e164,${EXTEN:1})exten =&gt; _91NXXNXXXXXX,n,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+[trunklocal]exten =&gt; _9NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+[trunktollfree]exten =&gt; _91800NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})exten =&gt; _91888NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})exten =&gt; _91877NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})exten =&gt; _91866NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+[international]ignorepat =&gt; 9include =&gt; longdistanceinclude =&gt; trunkint
+[longdistance]ignorepat =&gt; 9include =&gt; localinclude =&gt; trunkld
+[local]ignorepat =&gt; 9include =&gt; defaultinclude =&gt; trunklocalinclude =&gt; iaxtel700include =&gt; trunktollfreeinclude =&gt; iaxprovider
+include =&gt; parkedcalls
+[macro-trunkdial]exten =&gt; s,1,Dial(${ARG1})exten =&gt; s,n,Goto(s-${DIALSTATUS},1)exten =&gt; s-NOANSWER,1,Hangupexten =&gt; s-BUSY,1,Hangupexten =&gt; _s-.,1,NoOp
+[macro-stdexten];exten =&gt; s,1,Dial(${ARG2},20)  exten =&gt; s,2,Goto(s-${DIALSTATUS},1)  exten =&gt; s-NOANSWER,1,Voicemail(${ARG1},u) exten =&gt; s-NOANSWER,2,Goto(default,s,1)  exten =&gt; s-BUSY,1,Voicemail(${ARG1},b)  exten =&gt; s-BUSY,2,Goto(default,s,1)  exten =&gt; _s-.,1,Goto(s-NOANSWER,1)  exten =&gt; a,1,VoicemailMain(${ARG1})  
+[macro-stdPrivacyexten];exten =&gt; s,1,Dial(${ARG2},20|p)   exten =&gt; s,2,Goto(s-${DIALSTATUS},1)  exten =&gt; s-NOANSWER,1,Voicemail(${ARG1},u) exten =&gt; s-NOANSWER,2,Goto(default,s,1)  exten =&gt; s-BUSY,1,Voicemail(${ARG1},b)  exten =&gt; s-BUSY,2,Goto(default,s,1)  exten =&gt; s-DONTCALL,1,Goto(${ARG3},s,1)  exten =&gt; s-TORTURE,1,Goto(${ARG4},s,1)  exten =&gt; _s-.,1,Goto(s-NOANSWER,1)  exten =&gt; a,1,VoicemailMain(${ARG1})  
+[macro-page];
+exten =&gt; s,1,ChanIsAvail(${ARG1}|js)exten =&gt; s,n,GoToIf([${AVAILSTATUS} = &quot;1&quot;]?autoanswer:fail)exten =&gt; s,n(autoanswer),Set(_ALERT_INFO=&quot;RA&quot;)exten =&gt; s,n,SIPAddHeader(Call-Info: Answer-After=0)exten =&gt; s,n,NoOp()exten =&gt; s,n,Dial(${ARG1}||)exten =&gt; s,n(fail),Hangup
+[demo]exten =&gt; s,1,Wait(1)   exten =&gt; s,n,Answer   exten =&gt; s,n,Set(TIMEOUT(digit)=5) exten =&gt; s,n,Set(TIMEOUT(response)=10) exten =&gt; s,n(restart),BackGround(demo-congrats) exten =&gt; s,n(instruct),BackGround(demo-instruct)exten =&gt; s,n,WaitExten   exten =&gt; 2,1,BackGround(demo-moreinfo) exten =&gt; 2,n,Goto(s,instruct)exten =&gt; 3,1,Set(LANGUAGE()=fr)  exten =&gt; 3,n,Goto(s,restart)  exten =&gt; 1000,1,Goto(default,s,1)exten =&gt; 1234,1,Playback(transfer,skip)exten =&gt; 1234,n,Macro(stdexten,1234,${GLOBAL(CONSOLE)})exten =&gt; 1235,1,Voicemail(1234,u) exten =&gt; 1236,1,Dial(Console/dsp) exten =&gt; 1236,n,Voicemail(1234,b) exten =&gt; #,1,Playback(demo-thanks) exten =&gt; #,n,Hangup  exten =&gt; t,1,Goto(#,1) exten =&gt; i,1,Playback(invalid)  exten =&gt; 500,1,Playback(demo-abouttotry)exten =&gt; 500,n,Dial(IAX2/<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">guest at misery.digium.com</A>/<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">s at default</A>)exten =&gt; 500,n,Playback(demo-nogo)exten =&gt; 500,n,Goto(s,6)  exten =&gt; 600,1,Playback(demo-echotest) exten =&gt; 600,n,Echo   exten =&gt; 600,n,Playback(demo-echodone) exten =&gt; 600,n,Goto(s,6)  exten =&gt; 76245,1,Macro(page,SIP/Grandstream1)exten =&gt; _7XXX,1,Macro(page,SIP/${EXTEN})exten =&gt; 7999,1,Set(TIMEOUT(absolute)=60)exten =&gt; 7999,2,Page(Local/<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">Grandstream1 at page</A>&amp;Local/<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">Xlite1 at page</A>&amp;Local/<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">1234 at page</A>/n|d)exten =&gt; 8500,1,VoicemailMainexten =&gt; 8500,n,Goto(s,6)
+[page]exten =&gt; _X.,1,Macro(page,SIP/${EXTEN})
+[default]
+[sip-in]exten =&gt; _X.,1,DeadAgi(/root/asterisk-b2bua-0.3.0b/b2bua.pl)exten =&gt; _X.,2,Hangup()
+/**********************end of extensions.conf***********************/
+&gt;<i> Date: Fri, 8 Jun 2007 19:20:50 +0300&gt; From: <A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">mike at yes.net.ua</A>&gt; To: <A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">kro_ser at hotmail.com</A>&gt; Subject: Re[2]: [B2bua-users] 404 not found&gt; &gt; Hello Kro,&gt; &gt; Change host=10.20.30.40 to your actual address of proxy.&gt; &gt; Friday, June 8, 2007 6:57:54 PM, you wrote:&gt; 
+</I>_________________________________________________________________
+Live.com'u deneyin - h&#253;zl&#253; ve ki&#254;iselle&#254;tirilmi&#254; giri&#254; sayfan&#253;zla istedi&#240;iniz her &#254;ey tek bir yerde.
+<A HREF="http://www.live.com/getstarted">http://www.live.com/getstarted</A>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/b2bua-users/attachments/20070609/83054915/attachment.html">https://lists.berlios.de/pipermail/b2bua-users/attachments/20070609/83054915/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000022.html">[B2bua-users] 404 not found
+</A></li>
+	<LI>Next message: <A HREF="000024.html">[B2bua-users] 404 not found
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#23">[ date ]</a>
+              <a href="thread.html#23">[ thread ]</a>
+              <a href="subject.html#23">[ subject ]</a>
+              <a href="author.html#23">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/b2bua-users">More information about the B2bua-users
+mailing list</a><br>
+</body></html>

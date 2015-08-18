@@ -1,0 +1,182 @@
+From manjula_55 at yahoo.com  Tue Feb 26 16:26:58 2008
+From: manjula_55 at yahoo.com (manjula hettiarachchi)
+Date: Tue, 26 Feb 2008 07:26:58 -0800 (PST)
+Subject: [B2bua-users] how to do AUth for Framed-IP-Address
+Message-ID: <978879.2186.qm@web50304.mail.re2.yahoo.com>
+
+Hi
+
+I am using  asterisk b2bua  with my existing radius
+based billing backend and asterisk box. Its a really
+nice software. Thank you Mike !!
+
+THe system works fine for Enduser Accounts. However
+when a call is authenticated from another SIP proxy,
+b2bua tries User-Name auth for each call and does not 
+auth for the Framed-IP-Address.
+
+How do i make it to auth ONLY for the IP address?
+
+Note: the radius+billing work ok for other auth
+requests that come from h323 GK for Framed-IP-Address
+Authentication.
+
+
+Here is the auth packet (system tries to find user 113
+and fails auth)
+        NAS-Port-Type = Virtual
+        h323-gw-id = "xxxxxxxx"
+        Service-Type = Login-User
+        Called-Station-Id = "1614#6139888484848"
+        Cisco-NAS-Port = "SIP/1.1.1.1-b7a2eca8"
+        h323-call-type = "VoIP"
+        h323-call-origin = "originate"
+        NAS-IP-Address = 2.2.2.2
+        h323-conf-id =
+"702b0fad4894cfb6070c6c8549d3c3ed at 1.1.1.1"
+        Cisco-Call-Type = "VoIP"
+        Calling-Station-Id = "113"
+        Cisco-AVPair =
+"call-codec=g729;useragent=Asterisk PBX;"
+        User-Name = "113"
+        NAS-Identifier = "xxxxxxxx"
+        User-Password = "yyyy"
+        Framed-IP-Address = 1.1.1.1
+        NAS-Port = 5060
+        Client-IP-Address = 127.0.0.1
+
+
+
+
+Here is a auth packet thats from the working h323 gk.
+(auth works only for Framed-ip-address in this case,
+and the username 122 is ignored)
+
+       User-Name = "122"
+        NAS-IP-Address = 3.3.3.3
+        NAS-Identifier = "gk1"
+        NAS-Port-Type = Virtual
+        Service-Type = Login-User
+        Framed-IP-Address = 4.4.4.4
+        Calling-Station-Id = "122"
+        Called-Station-Id = "606#932222234"
+        h323-conf-id = "6E4FB368 82DEDC11 BAD9000E
+2E6A872A"
+        h323-call-origin = "originate"
+        h323-call-type = "VoIP"
+        h323-gw-id = "gk1"
+        User-Password = "yyyy"
+        Client-IP-Address = 127.0.0.1
+
+
+
+
+
+      ____________________________________________________________________________________
+Be a better friend, newshound, and 
+know-it-all with Yahoo! Mobile.  Try it now.  http://mobile.yahoo.com/;_ylt=Ahu06i62sR8HDtDypao8Wcj9tAcJ 
+
+
+
+From mike at yes.net.ua  Wed Feb 27 08:46:05 2008
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Wed, 27 Feb 2008 09:46:05 +0200
+Subject: [B2bua-users] how to do AUth for Framed-IP-Address
+In-Reply-To: <978879.2186.qm@web50304.mail.re2.yahoo.com>
+References: <978879.2186.qm@web50304.mail.re2.yahoo.com>
+Message-ID: <977121094.20080227094605@yes.net.ua>
+
+Hello manjula,
+
+ There is no error in *b2bua, you should try to find what your
+billing system expect to receive and why it returning
+Authorization-Reject.
+
+Tuesday, February 26, 2008 5:26:58 PM, you wrote:
+
+mh> Hi
+
+mh> I am using  asterisk b2bua  with my existing radius
+mh> based billing backend and asterisk box. Its a really
+mh> nice software. Thank you Mike !!
+
+mh> THe system works fine for Enduser Accounts. However
+mh> when a call is authenticated from another SIP proxy,
+mh> b2bua tries User-Name auth for each call and does not 
+mh> auth for the Framed-IP-Address.
+
+mh> How do i make it to auth ONLY for the IP address?
+
+mh> Note: the radius+billing work ok for other auth
+mh> requests that come from h323 GK for Framed-IP-Address
+mh> Authentication.
+
+
+mh> Here is the auth packet (system tries to find user 113
+mh> and fails auth)
+mh>         NAS-Port-Type = Virtual
+mh>         h323-gw-id = "xxxxxxxx"
+mh>         Service-Type = Login-User
+mh>         Called-Station-Id = "1614#6139888484848"
+mh>         Cisco-NAS-Port = "SIP/1.1.1.1-b7a2eca8"
+mh>         h323-call-type = "VoIP"
+mh>         h323-call-origin = "originate"
+mh>         NAS-IP-Address = 2.2.2.2
+mh>         h323-conf-id =
+mh> "702b0fad4894cfb6070c6c8549d3c3ed at 1.1.1.1"
+mh>         Cisco-Call-Type = "VoIP"
+mh>         Calling-Station-Id = "113"
+mh>         Cisco-AVPair =
+mh> "call-codec=g729;useragent=Asterisk PBX;"
+mh>         User-Name = "113"
+mh>         NAS-Identifier = "xxxxxxxx"
+mh>         User-Password = "yyyy"
+mh>         Framed-IP-Address = 1.1.1.1
+mh>         NAS-Port = 5060
+mh>         Client-IP-Address = 127.0.0.1
+
+
+
+
+mh> Here is a auth packet thats from the working h323 gk.
+mh> (auth works only for Framed-ip-address in this case,
+mh> and the username 122 is ignored)
+
+mh>        User-Name = "122"
+mh>         NAS-IP-Address = 3.3.3.3
+mh>         NAS-Identifier = "gk1"
+mh>         NAS-Port-Type = Virtual
+mh>         Service-Type = Login-User
+mh>         Framed-IP-Address = 4.4.4.4
+mh>         Calling-Station-Id = "122"
+mh>         Called-Station-Id = "606#932222234"
+mh>         h323-conf-id = "6E4FB368 82DEDC11 BAD9000E
+mh> 2E6A872A"
+mh>         h323-call-origin = "originate"
+mh>         h323-call-type = "VoIP"
+mh>         h323-gw-id = "gk1"
+mh>         User-Password = "yyyy"
+mh>         Client-IP-Address = 127.0.0.1
+
+
+
+
+
+mh>      
+mh> ____________________________________________________________________________________
+mh> Be a better friend, newshound, and 
+mh> know-it-all with Yahoo! Mobile.  Try it now. 
+mh> http://mobile.yahoo.com/;_ylt=Ahu06i62sR8HDtDypao8Wcj9tAcJ 
+
+mh> _______________________________________________
+mh> B2bua-users mailing list
+mh> B2bua-users at lists.berlios.de
+mh> https://lists.berlios.de/mailman/listinfo/b2bua-users
+
+
+
+--
+Mike Tkachuk
+
+
+

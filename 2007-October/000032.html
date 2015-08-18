@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [B2bua-users] B2bua
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/b2bua-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20B2bua&In-Reply-To=%3C1998442436.20071009112508%40yes.net.ua%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000030.html">
+   <LINK REL="Next"  HREF="000031.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[B2bua-users] B2bua</H1>
+    <B>Mike Tkachuk</B> 
+    <A HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20B2bua&In-Reply-To=%3C1998442436.20071009112508%40yes.net.ua%3E"
+       TITLE="[B2bua-users] B2bua">mike at yes.net.ua
+       </A><BR>
+    <I>Tue Oct  9 10:25:08 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000030.html">[B2bua-users] Running AsteriskB2BUA with freeRADIUS-Problem solved
+</A></li>
+        <LI>Next message: <A HREF="000031.html">[B2bua-users] What versions are compatible?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#32">[ date ]</a>
+              <a href="thread.html#32">[ thread ]</a>
+              <a href="subject.html#32">[ subject ]</a>
+              <a href="author.html#32">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello srinivas,
+
+ Sorry for delayed answer.
+ *B2BUA sends authorization request and than Accounting-Start and
+ Accounting-Stop, this usually is enough to do accurate billing.
+ 
+ Asterisk don't maintain call state if there is no media passing over
+ asterisk and the gateways crashed (or Internet uplink problems),
+ alternatively you can setup rtp timeout, but then you will need to
+ proxy all media.
+
+ Acct-Interim-Update is used to initiate sending accounting updates,
+ it mainly used to be sure that asterisk is running and not crashed. It
+ don't maintain call state (i.e. it won't increase session-time when
+ call is connected) due to asterisk architecture.
+ So probably you can send Access request without Acct-Interim-Update
+ attribute. 
+ Due to radius protocol limitation YOU CANNOT send any reply with
+ accounting reply packet, so you cannot update Session-Timeout from
+ accounting packets.
+
+ 
+Saturday, October 6, 2007 7:19:48 AM, you wrote:
+
+sA&gt; Hello mike,
+
+sA&gt; Thanks for your valuable reply
+
+sA&gt; i have understood that radius with the asterisk-b2bua do only 
+sA&gt; action of&#160; getting&#160; Session-Timeout &amp; Acct-Interim-Update.
+sA&gt; so i have tested the setup by doing authentication using openser and 
+sA&gt; i was successfull
+
+sA&gt; thanks for your kind cooperation 
+
+sA&gt; and one more doubt i have is 
+
+sA&gt; problem:
+
+sA&gt; Suppose i have 200 minutes of talktime in my service.
+sA&gt; i can put this 200 numeral into the radreply table against the 
+sA&gt; designated user. 
+sA&gt; So when Access-Request goes to radius
+sA&gt; it responds with this 200 numeral in its Session-Timeout
+sA&gt; variable .
+sA&gt; So asterisk uses it in dial application in &quot;S&quot; option
+sA&gt; to have control over the session 
+
+sA&gt; the doubts i have are
+
+sA&gt; 1)How asterisk maintains the state i.e.
+sA&gt; &#160;&#160; will it issue reinvites during the session ?
+sA&gt; &#160;&#160; (mediaproxying ?)
+
+sA&gt; 2)What is the precise use of the Acct-Interim-Update?
+sA&gt; my understanding is as follows: 
+sA&gt; with above 200 numeral as the Session-Timeout Asterisk
+sA&gt; bridges the call and if the session ends before 200 value
+sA&gt; there should be some mechanism that manipulates the Session-Timeout
+sA&gt; variable(decrement) at the radius table and if so that the NEXT CALL can be started with
+sA&gt; a timeout equal to This Fresh Session-Timeout value .
+
+sA&gt; to get this updated Session-Timeout value only we are using Acct-Interim-Update
+
+sA&gt; this was my understanding regarding doubt no :2
+sA&gt; if i am wrong just letme know 
+
+sA&gt; Thanks and regards 
+sA&gt; Srinivas Antarvedi
+sA&gt;   
+
+
+--
+Mike Tkachuk
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000030.html">[B2bua-users] Running AsteriskB2BUA with freeRADIUS-Problem solved
+</A></li>
+	<LI>Next message: <A HREF="000031.html">[B2bua-users] What versions are compatible?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#32">[ date ]</a>
+              <a href="thread.html#32">[ thread ]</a>
+              <a href="subject.html#32">[ subject ]</a>
+              <a href="author.html#32">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/b2bua-users">More information about the B2bua-users
+mailing list</a><br>
+</body></html>

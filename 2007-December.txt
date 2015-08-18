@@ -1,0 +1,59 @@
+From tawandac at gmail.com  Tue Dec 18 11:27:25 2007
+From: tawandac at gmail.com (TCB)
+Date: Tue, 18 Dec 2007 12:27:25 +0200
+Subject: [B2bua-users] H323-credit-time
+Message-ID: <f9db9e000712180227q343b1beax6159e62cf8b3ae0a@mail.gmail.com>
+
+Hello,
+
+My radius is sending h323-credit-time instead of Session-Timeout , how
+do i tweak b2bua.pl to use this value.
+NB:: The value comes as
+O> AccessAccept attributes for 10.0.0.13:2967 with id 59
+H323-credit-time: ['h323-credit-time=12000']
+
+-- 
+TC
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/b2bua-users/attachments/20071218/20f7bbc1/attachment.html>
+
+From mike at yes.net.ua  Tue Dec 18 12:08:44 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Tue, 18 Dec 2007 13:08:44 +0200
+Subject: [B2bua-users] H323-credit-time
+In-Reply-To: <f9db9e000712180227q343b1beax6159e62cf8b3ae0a@mail.gmail.com>
+References: <f9db9e000712180227q343b1beax6159e62cf8b3ae0a@mail.gmail.com>
+Message-ID: <1979734341.20071218130844@yes.net.ua>
+
+Hello TCB,
+
+
+You need to add next attribute in the bottom of the dictionary file:
+ATTRIBUTE       h323-credit-time       102     string  Cisco
+
+Change line $data{'session_timeout'} = $r->get_hashattribute('Session-Timeout') + 0;
+to something like this;
+$data{'session_timeout'} = $r->get_hashattribute('h323-credit-time');
+$data{'session_timeout'} =~ s/h323-credit-time=//;
+
+
+
+Tuesday, December 18, 2007 12:27:25 PM, you wrote:
+
+T> Hello,
+
+T> My radius is sending h323-credit-time instead of Session-Timeout , how
+T> do i tweak b2bua.pl to use this value. 
+T> NB:: The value comes as 
+O>> AccessAccept attributes for 10.0.0.13:2967 with id 59
+T> H323-credit-time: ['h323-credit-time=12000']
+
+
+
+
+--
+Mike Tkachuk
+
+
+

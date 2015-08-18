@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [B2bua-users] Running AsteriskB2BUA with freeRADIUS-Help required
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/b2bua-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20Running%20AsteriskB2BUA%20with%20freeRADIUS-Help%20required&In-Reply-To=%3C8260fc320710010548m4f79443bk93c062adc35d1b45%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000028.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[B2bua-users] Running AsteriskB2BUA with freeRADIUS-Help required</H1>
+    <B>srinivas Antarvedi</B> 
+    <A HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20Running%20AsteriskB2BUA%20with%20freeRADIUS-Help%20required&In-Reply-To=%3C8260fc320710010548m4f79443bk93c062adc35d1b45%40mail.gmail.com%3E"
+       TITLE="[B2bua-users] Running AsteriskB2BUA with freeRADIUS-Help required">srinivas.antarvedi at gmail.com
+       </A><BR>
+    <I>Mon Oct  1 14:48:31 CEST 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000028.html">[B2bua-users] Running AsteriskB2BUA with freeRADIUS-Help	required
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#27">[ date ]</a>
+              <a href="thread.html#27">[ thread ]</a>
+              <a href="subject.html#27">[ subject ]</a>
+              <a href="author.html#27">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello All,
+I am new to this group
+just before this i was working with only openser and radius
+now i moved to  prepaid billing application for that my setup follows like
+
+Asterisk B2BUA-0.3.0b patch installed on asterisk 1.4.2
+and radiusclinet-ng was installed as a radius client
+
+Case 1:
+
+When i tried to send request to radius as i used to did with openser
+ie radcheck values
+                             username Auth-Type Digest
+                             username User-Password pwd
+it is showing it didnt find any corresponding values to the Digest method in
+the request
+and sent Access-Reject Reply
+
+Case 2:
+
+when i tried to remove the Auth-Type it showing it was not found any
+auth-Type and
+sending Access-Reject reply
+
+Asterisk Dump:
+
+ Executing [<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">1000 at default</A>:1] DeadAGI(&quot;SIP/1001-089efee8&quot;,
+&quot;/usr/local/b2bua/b2bua.pl&quot;) in new stack
+                                       -- Launched AGI Script
+/usr/local/b2bua/b2bua.pl
+                                         /usr/local/b2bua/b2bua.pl: Call
+from endpoint 1001 to 1000 DENIED
+                                      -- AGI Script
+/usr/local/b2bua/b2bua.pl completed, returning 0
+
+
+Radius Dump:
+
+rad_recv: Access-Request packet from host 127.0.0.1:32921, id=50, length=239
+        Cisco-Call-Type = &quot;VoIP&quot;
+        Calling-Station-Id = &quot;1001&quot;
+        Called-Station-Id = &quot;1000&quot;
+        Cisco-NAS-Port = &quot;SIP/1001-089efee8&quot;
+        Cisco-AVPair = &quot;call-codec=ulaw;useragent=X-Lite release 1011s stamp
+41150;&quot;
+        h323-call-origin = &quot;originate&quot;
+        User-Name = &quot;1001&quot;
+        NAS-Identifier = &quot;Asterisk&quot;
+        Framed-IP-Address = 192.168.1.33
+        NAS-IP-Address = 127.0.0.1
+        NAS-Port = 5060
+        h323-conf-id = &quot;Y2U1MWRhNjQyMzM0ZTFjNWQzMjU3YWNjMWMxZmZkNTQ.&quot;
+
+  Processing the authorize section of radiusd.conf
+
+modcall: entering group authorize for request 13
+  modcall[authorize]: module &quot;preprocess&quot; returns ok for request 13
+  modcall[authorize]: module &quot;chap&quot; returns noop for request 13
+  modcall[authorize]: module &quot;mschap&quot; returns noop for request 13
+  modcall[authorize]: module &quot;digest&quot; returns noop for request 13
+    rlm_realm: No '@' in User-Name = &quot;1001&quot;, looking up realm NULL
+    rlm_realm: No such realm &quot;NULL&quot;
+  modcall[authorize]: module &quot;suffix&quot; returns noop for request 13
+  rlm_eap: No EAP-Message, not doing EAP
+  modcall[authorize]: module &quot;eap&quot; returns noop for request 13
+
+rlm_sql (sql): Released sql socket id: 0
+  modcall[authorize]: module &quot;sql&quot; returns ok for request 13
+rlm_pap: WARNING! No &quot;known good&quot; password found for the user.
+Authentication may fail because of this.
+  modcall[authorize]: module &quot;pap&quot; returns noop for request 13
+modcall: leaving group authorize (returns ok) for request 13
+auth: No authenticate method (Auth-Type) configuration found for the
+request: Rejecting the user
+auth: Failed to validate the user.
+
+Delaying request 13 for 1 seconds
+Finished request 13
+Going to the next request
+--- Walking the entire request list ---
+Sending Access-Reject of id 49 to 127.0.0.1 port 32921
+Waking up in 1 seconds...
+--- Walking the entire request list ---
+Waking up in 1 seconds...
+--- Walking the entire request list ---
+Sending Access-Reject of id 50 to 127.0.0.1 port 32921
+Waking up in 2 seconds...
+--- Walking the entire request list ---
+Cleaning up request 12 ID 49 with timestamp 4700e59d
+Waking up in 2 seconds...
+--- Walking the entire request list ---
+Cleaning up request 13 ID 50 with timestamp 4700e59f
+Nothing to do.  Sleeping until we see a request.
+
+
+Can anybody have any clues?
+
+
+
+
+Thanks and regards
+Srinivas Antarvedi
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/b2bua-users/attachments/20071001/286594d0/attachment.html">https://lists.berlios.de/pipermail/b2bua-users/attachments/20071001/286594d0/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000028.html">[B2bua-users] Running AsteriskB2BUA with freeRADIUS-Help	required
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#27">[ date ]</a>
+              <a href="thread.html#27">[ thread ]</a>
+              <a href="subject.html#27">[ subject ]</a>
+              <a href="author.html#27">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/b2bua-users">More information about the B2bua-users
+mailing list</a><br>
+</body></html>

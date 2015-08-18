@@ -1,0 +1,303 @@
+From hoathai at vngt.vn  Mon Feb 12 09:09:55 2007
+From: hoathai at vngt.vn (Hoa Thai Duy)
+Date: Mon, 12 Feb 2007 15:09:55 +0700
+Subject: [B2bua-users] Porting to Asterisk 1.4
+In-Reply-To: <cfbb389b0612070502sfd1581eh46def229f1e0be51@mail.gmail.com>
+References: <mailman.105.1165489274.25885.b2bua-users@lists.berlios.de>
+	<cfbb389b0612070502sfd1581eh46def229f1e0be51@mail.gmail.com>
+Message-ID: <010001c74e7d$2e3b5f70$5703d67d@hangla>
+
+Mike
+
+ 
+
+Do you intend to port the scripts and patch to 1.4?
+
+ 
+
+Brgds
+
+ 
+
+Hoa
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/b2bua-users/attachments/20070212/8859f20c/attachment.html>
+
+From manjula_55 at yahoo.com  Thu Feb 15 09:26:17 2007
+From: manjula_55 at yahoo.com (manjula hettiarachchi)
+Date: Thu, 15 Feb 2007 00:26:17 -0800 (PST)
+Subject: [B2bua-users] *b2bua not cutting off the call when credit goes to
+	zero
+Message-ID: <598182.58214.qm@web50314.mail.yahoo.com>
+
+Hi
+
+I am using b2bua-0.2.0b2 with  asterisk-1.2.11. 
+Authentication, Autherization and accounting is
+working ok. 
+ However we have seen that calls do not get cut off
+when credit goes minus.
+
+I can see radius sending correct Auth-reply
+
+Thu Feb 15 08:03:08 2007
+        h323-credit-time = "h323-credit-time=60"
+        h323-credit-amount = "h323-credit-amount=0.01"
+        h323-currency = "h323-currency=USD"
+        h323-billing-model = "h323-billing-model=2"
+        h323-return-code = "h323-return-code=0"
+        Timestamp = 1171526588
+
+
+Can anyone suggest me a method to troubleshoot what's
+wrong ?
+
+Thanks in advance
+
+Manjula Hettiarachchi
+
+
+ 
+____________________________________________________________________________________
+Now that's room service!  Choose from over 150,000 hotels
+in 45,000 destinations on Yahoo! Travel to find your fit.
+http://farechase.yahoo.com/promo-generic-14795097
+
+
+From mike at yes.net.ua  Thu Feb 15 09:46:06 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Thu, 15 Feb 2007 10:46:06 +0200
+Subject: [B2bua-users] Porting to Asterisk 1.4
+In-Reply-To: <010001c74e7d$2e3b5f70$5703d67d@hangla>
+References: <mailman.105.1165489274.25885.b2bua-users@lists.berlios.de>
+	<cfbb389b0612070502sfd1581eh46def229f1e0be51@mail.gmail.com>
+	<010001c74e7d$2e3b5f70$5703d67d@hangla>
+Message-ID: <427866090.20070215104606@yes.net.ua>
+
+Hello Hoa,
+
+New updated version will be released probably with asterisk 1.4.1.
+Current version of asterisk 1.4 don't fulfill my needs - it's too
+unstable.
+
+Monday, February 12, 2007 10:09:55 AM, you wrote:
+
+HTD>     
+HTD>   
+HTD>   
+HTD> Mike
+HTD>   
+HTD> ?
+HTD>   
+HTD> Do you intend to port the scripts and patch to 1.4?
+HTD>   
+HTD> ?
+HTD>   
+HTD> Brgds
+HTD>   
+HTD> ?
+HTD>   
+HTD>   
+HTD> Hoa
+HTD>   
+HTD>   
+HTD> ?
+HTD>   
+HTD>   
+HTD>     
+
+
+--
+Mike Tkachuk
+
+
+
+From mike at yes.net.ua  Thu Feb 15 09:47:44 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Thu, 15 Feb 2007 10:47:44 +0200
+Subject: [B2bua-users] *b2bua not cutting off the call when credit goes
+	to zero
+In-Reply-To: <598182.58214.qm@web50314.mail.yahoo.com>
+References: <598182.58214.qm@web50314.mail.yahoo.com>
+Message-ID: <1037783020.20070215104744@yes.net.ua>
+
+Hello manjula,
+
+ For *B2BUA the correct way of returning a session timeout is using a
+ Session-Timeout attribute, not h323-credit-time.
+
+Thursday, February 15, 2007 10:26:17 AM, you wrote:
+
+mh> Hi
+
+mh> I am using b2bua-0.2.0b2 with  asterisk-1.2.11. 
+mh> Authentication, Autherization and accounting is
+mh> working ok. 
+mh>  However we have seen that calls do not get cut off
+mh> when credit goes minus.
+
+mh> I can see radius sending correct Auth-reply
+
+mh> Thu Feb 15 08:03:08 2007
+mh>         h323-credit-time = "h323-credit-time=60"
+mh>         h323-credit-amount = "h323-credit-amount=0.01"
+mh>         h323-currency = "h323-currency=USD"
+mh>         h323-billing-model = "h323-billing-model=2"
+mh>         h323-return-code = "h323-return-code=0"
+mh>         Timestamp = 1171526588
+
+
+mh> Can anyone suggest me a method to troubleshoot what's
+mh> wrong ?
+
+mh> Thanks in advance
+
+mh> Manjula Hettiarachchi
+
+
+mh>  
+mh> ____________________________________________________________________________________
+mh> Now that's room service!  Choose from over 150,000 hotels
+mh> in 45,000 destinations on Yahoo! Travel to find your fit.
+mh> http://farechase.yahoo.com/promo-generic-14795097
+mh> _______________________________________________
+mh> B2bua-users mailing list
+mh> B2bua-users at lists.berlios.de
+mh> https://lists.berlios.de/mailman/listinfo/b2bua-users
+
+
+--
+Mike Tkachuk
+
+
+
+From mike at yes.net.ua  Fri Feb 16 09:46:24 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Fri, 16 Feb 2007 10:46:24 +0200
+Subject: [B2bua-users] *b2bua not cutting off the call when credit goes
+	to zero
+In-Reply-To: <269799.22229.qm@web50305.mail.yahoo.com>
+References: <1037783020.20070215104744@yes.net.ua>
+	<269799.22229.qm@web50305.mail.yahoo.com>
+Message-ID: <2510573836.20070216104624@yes.net.ua>
+
+Hello manjula,
+
+Please be sure that you have all this attributes (h323-credit-time
+etc) in your *B2BUA dictionary file.
+
+Thursday, February 15, 2007 5:34:02 PM, you wrote:
+
+mh> Hello Mike
+
+mh> As your advised I replaced 
+
+mh> $data{'session_timeout'} =
+$r->>get_hashattribute('Session-Timeout') + 0;
+
+mh> with 
+mh> $data{'session_timeout'} =
+$r->>get_hashattribute('h323-credit-time');
+mh> $data{'session_timeout'} =~ s/h323-credit-time=//;
+
+mh> Also I can see Radius is sending 
+mh> Thu Feb 15 15:24:30 2007
+mh>         h323-credit-time = "h323-credit-time=23932"
+mh>         h323-credit-amount = "h323-credit-amount=3.99"
+mh>         h323-currency = "h323-currency=USD"
+mh>         h323-billing-model = "h323-billing-model=2"
+mh>         h323-return-code = "h323-return-code=0"
+mh>         Timestamp = 1171553070
+
+
+mh> But I can trace from b2bua.pl that 
+mh> $data{'session_timeout'} returns <BLANK>
+
+mh> Any idear is appreciated
+
+mh> Thanks in advance
+
+mh> Manjula
+
+mh> --- Mike Tkachuk <mike at yes.net.ua> wrote:
+
+>> Hello manjula,
+>> 
+>>  For *B2BUA the correct way of returning a session
+>> timeout is using a
+>>  Session-Timeout attribute, not h323-credit-time.
+>> 
+>> Thursday, February 15, 2007 10:26:17 AM, you wrote:
+>> 
+>> mh> Hi
+>> 
+>> mh> I am using b2bua-0.2.0b2 with  asterisk-1.2.11. 
+>> mh> Authentication, Autherization and accounting is
+>> mh> working ok. 
+>> mh>  However we have seen that calls do not get cut
+>> off
+>> mh> when credit goes minus.
+>> 
+>> mh> I can see radius sending correct Auth-reply
+>> 
+>> mh> Thu Feb 15 08:03:08 2007
+>> mh>         h323-credit-time = "h323-credit-time=60"
+>> mh>         h323-credit-amount =
+>> "h323-credit-amount=0.01"
+>> mh>         h323-currency = "h323-currency=USD"
+>> mh>         h323-billing-model =
+>> "h323-billing-model=2"
+>> mh>         h323-return-code = "h323-return-code=0"
+>> mh>         Timestamp = 1171526588
+>> 
+>> 
+>> mh> Can anyone suggest me a method to troubleshoot
+>> what's
+>> mh> wrong ?
+>> 
+>> mh> Thanks in advance
+>> 
+>> mh> Manjula Hettiarachchi
+>> 
+>> 
+>> mh>  
+>> mh>
+>>
+mh> ____________________________________________________________________________________
+>> mh> Now that's room service!  Choose from over
+>> 150,000 hotels
+>> mh> in 45,000 destinations on Yahoo! Travel to find
+>> your fit.
+>> mh>
+>> http://farechase.yahoo.com/promo-generic-14795097
+>> mh> _______________________________________________
+>> mh> B2bua-users mailing list
+>> mh> B2bua-users at lists.berlios.de
+>> mh>
+>>
+mh> https://lists.berlios.de/mailman/listinfo/b2bua-users
+>> 
+>> 
+>> --
+>> Mike Tkachuk
+>> 
+>> 
+
+
+
+mh>  
+mh> ____________________________________________________________________________________
+mh> TV dinner still cooling? 
+mh> Check out "Tonight's Picks" on Yahoo! TV.
+mh> http://tv.yahoo.com/
+
+
+--
+Mike Tkachuk
+
+
+

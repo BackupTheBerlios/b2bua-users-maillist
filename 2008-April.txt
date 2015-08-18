@@ -1,0 +1,35 @@
+From mike at yes.net.ua  Fri Apr 18 15:01:33 2008
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Fri, 18 Apr 2008 16:01:33 +0300
+Subject: [B2bua-users] callback with b2bua
+In-Reply-To: <124350.85328.qm@web50312.mail.re2.yahoo.com>
+References: <124350.85328.qm@web50312.mail.re2.yahoo.com>
+Message-ID: <1918181477.20080418160133@yes.net.ua>
+
+Hello manjula,
+
+Probably serious modifications of code needed to do that, and you
+scripts need to pass what user to bill some way.
+
+Friday, April 18, 2008 3:44:57 PM, you wrote:
+
+mh> Hello Mike
+
+
+mh> I have been trying to use b2bua script for call back.
+mh> I am using call files to auto generate the calls.
+
+mh> However the Origination-leg of the call is made directly by
+mh> Asterisk and is not going thru b2bua , so its not billed.  
+
+mh> Do you have any method to bill the origination-leg of the call?
+
+mh> Thanks 
+
+mh> Manjula Hettiarachchi
+
+--
+Mike Tkachuk
+
+
+

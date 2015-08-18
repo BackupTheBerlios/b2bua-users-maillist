@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [B2bua-users] how to do AUth for Framed-IP-Address
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/b2bua-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20how%20to%20do%20AUth%20for%20Framed-IP-Address&In-Reply-To=%3C977121094.20080227094605%40yes.net.ua%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000037.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[B2bua-users] how to do AUth for Framed-IP-Address</H1>
+    <B>Mike Tkachuk</B> 
+    <A HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20how%20to%20do%20AUth%20for%20Framed-IP-Address&In-Reply-To=%3C977121094.20080227094605%40yes.net.ua%3E"
+       TITLE="[B2bua-users] how to do AUth for Framed-IP-Address">mike at yes.net.ua
+       </A><BR>
+    <I>Wed Feb 27 08:46:05 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000037.html">[B2bua-users] how to do AUth for Framed-IP-Address
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#38">[ date ]</a>
+              <a href="thread.html#38">[ thread ]</a>
+              <a href="subject.html#38">[ subject ]</a>
+              <a href="author.html#38">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello manjula,
+
+ There is no error in *b2bua, you should try to find what your
+billing system expect to receive and why it returning
+Authorization-Reject.
+
+Tuesday, February 26, 2008 5:26:58 PM, you wrote:
+
+mh&gt; Hi
+
+mh&gt; I am using  asterisk b2bua  with my existing radius
+mh&gt; based billing backend and asterisk box. Its a really
+mh&gt; nice software. Thank you Mike !!
+
+mh&gt; THe system works fine for Enduser Accounts. However
+mh&gt; when a call is authenticated from another SIP proxy,
+mh&gt; b2bua tries User-Name auth for each call and does not 
+mh&gt; auth for the Framed-IP-Address.
+
+mh&gt; How do i make it to auth ONLY for the IP address?
+
+mh&gt; Note: the radius+billing work ok for other auth
+mh&gt; requests that come from h323 GK for Framed-IP-Address
+mh&gt; Authentication.
+
+
+mh&gt; Here is the auth packet (system tries to find user 113
+mh&gt; and fails auth)
+mh&gt;         NAS-Port-Type = Virtual
+mh&gt;         h323-gw-id = &quot;xxxxxxxx&quot;
+mh&gt;         Service-Type = Login-User
+mh&gt;         Called-Station-Id = &quot;1614#6139888484848&quot;
+mh&gt;         Cisco-NAS-Port = &quot;SIP/1.1.1.1-b7a2eca8&quot;
+mh&gt;         h323-call-type = &quot;VoIP&quot;
+mh&gt;         h323-call-origin = &quot;originate&quot;
+mh&gt;         NAS-IP-Address = 2.2.2.2
+mh&gt;         h323-conf-id =
+mh&gt; &quot;<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">702b0fad4894cfb6070c6c8549d3c3ed at 1.1.1.1</A>&quot;
+mh&gt;         Cisco-Call-Type = &quot;VoIP&quot;
+mh&gt;         Calling-Station-Id = &quot;113&quot;
+mh&gt;         Cisco-AVPair =
+mh&gt; &quot;call-codec=g729;useragent=Asterisk PBX;&quot;
+mh&gt;         User-Name = &quot;113&quot;
+mh&gt;         NAS-Identifier = &quot;xxxxxxxx&quot;
+mh&gt;         User-Password = &quot;yyyy&quot;
+mh&gt;         Framed-IP-Address = 1.1.1.1
+mh&gt;         NAS-Port = 5060
+mh&gt;         Client-IP-Address = 127.0.0.1
+
+
+
+
+mh&gt; Here is a auth packet thats from the working h323 gk.
+mh&gt; (auth works only for Framed-ip-address in this case,
+mh&gt; and the username 122 is ignored)
+
+mh&gt;        User-Name = &quot;122&quot;
+mh&gt;         NAS-IP-Address = 3.3.3.3
+mh&gt;         NAS-Identifier = &quot;gk1&quot;
+mh&gt;         NAS-Port-Type = Virtual
+mh&gt;         Service-Type = Login-User
+mh&gt;         Framed-IP-Address = 4.4.4.4
+mh&gt;         Calling-Station-Id = &quot;122&quot;
+mh&gt;         Called-Station-Id = &quot;606#932222234&quot;
+mh&gt;         h323-conf-id = &quot;6E4FB368 82DEDC11 BAD9000E
+mh&gt; 2E6A872A&quot;
+mh&gt;         h323-call-origin = &quot;originate&quot;
+mh&gt;         h323-call-type = &quot;VoIP&quot;
+mh&gt;         h323-gw-id = &quot;gk1&quot;
+mh&gt;         User-Password = &quot;yyyy&quot;
+mh&gt;         Client-IP-Address = 127.0.0.1
+
+
+
+
+
+mh&gt;      
+mh&gt; ____________________________________________________________________________________
+mh&gt; Be a better friend, newshound, and 
+mh&gt; know-it-all with Yahoo! Mobile.  Try it now. 
+mh&gt; <A HREF="http://mobile.yahoo.com/;_ylt=Ahu06i62sR8HDtDypao8Wcj9tAcJ">http://mobile.yahoo.com/;_ylt=Ahu06i62sR8HDtDypao8Wcj9tAcJ</A> 
+
+mh&gt; _______________________________________________
+mh&gt; B2bua-users mailing list
+mh&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">B2bua-users at lists.berlios.de</A>
+mh&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">https://lists.berlios.de/mailman/listinfo/b2bua-users</A>
+
+
+
+--
+Mike Tkachuk
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000037.html">[B2bua-users] how to do AUth for Framed-IP-Address
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#38">[ date ]</a>
+              <a href="thread.html#38">[ thread ]</a>
+              <a href="subject.html#38">[ subject ]</a>
+              <a href="author.html#38">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/b2bua-users">More information about the B2bua-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [B2bua-users] Running AsteriskB2BUA with freeRADIUS-Help	required
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/b2bua-users/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20Running%20AsteriskB2BUA%20with%20freeRADIUS-Help%0A%09required&In-Reply-To=%3C04919425.20071005181110%40yes.net.ua%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000028.html">
+   <LINK REL="Next"  HREF="000030.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[B2bua-users] Running AsteriskB2BUA with freeRADIUS-Help	required</H1>
+    <B>Mike Tkachuk</B> 
+    <A HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20Running%20AsteriskB2BUA%20with%20freeRADIUS-Help%0A%09required&In-Reply-To=%3C04919425.20071005181110%40yes.net.ua%3E"
+       TITLE="[B2bua-users] Running AsteriskB2BUA with freeRADIUS-Help	required">mike at yes.net.ua
+       </A><BR>
+    <I>Fri Oct  5 17:11:10 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000028.html">[B2bua-users] Running AsteriskB2BUA with freeRADIUS-Help	required
+</A></li>
+        <LI>Next message: <A HREF="000030.html">[B2bua-users] Running AsteriskB2BUA with freeRADIUS-Problem solved
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#29">[ date ]</a>
+              <a href="thread.html#29">[ thread ]</a>
+              <a href="subject.html#29">[ subject ]</a>
+              <a href="author.html#29">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello srinivas,
+
+ There is no digest autorization in B2BUA just because the user agent
+ should be autorized by proxy (SER), the B2BUA is acting as called
+ party (same like: called phone don't try to authorize the callee).
+ You need to assume the call is autorized by a proxy and modify your
+ radius billing logic.
+
+Monday, October 1, 2007 3:48:31 PM, you wrote:
+
+sA&gt; Hello All,
+sA&gt; I am new to this group 
+sA&gt; just before this i was working with only openser and radius
+sA&gt; now i moved to&#160; prepaid billing application for that my setup follows like
+
+sA&gt; Asterisk B2BUA-0.3.0b patch installed on asterisk  1.4.2 
+sA&gt; and radiusclinet-ng was installed as a radius client
+
+sA&gt; Case 1:
+
+sA&gt; When i tried to send request to radius as i used to did with openser 
+sA&gt; ie radcheck values
+sA&gt; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160; username Auth-Type Digest
+sA&gt; &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; username User-Password pwd
+sA&gt; it is showing it didnt find any corresponding values to the Digest method in the request
+sA&gt; and sent Access-Reject Reply
+
+sA&gt; Case 2:
+
+sA&gt; when i tried to remove the Auth-Type it showing it was not found any auth-Type and
+sA&gt; sending Access-Reject reply 
+
+sA&gt; Asterisk Dump:
+
+sA&gt; &#160;Executing [<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">1000 at default</A>:1] DeadAGI(&quot;SIP/1001-089efee8&quot;,
+sA&gt; &quot;/usr/local/b2bua/b2bua.pl&quot;) in new stack
+sA&gt; &#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; -- Launched AGI Script /usr/local/b2bua/b2bua.pl
+sA&gt; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;
+sA&gt; /usr/local/b2bua/b2bua.pl: Call from endpoint 1001 to 1000 DENIED
+sA&gt; &#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160; -- AGI Script
+sA&gt; /usr/local/b2bua/b2bua.pl completed, returning 0
+
+sA&gt;  
+sA&gt; Radius Dump:
+
+sA&gt; rad_recv: Access-Request packet from host  127.0.0.1:32921, id=50, length=239
+sA&gt; &#160;&#160;&#160;&#160;&#160;&#160;&#160; Cisco-Call-Type = &quot;VoIP&quot;
+sA&gt; &#160;&#160;&#160;&#160;&#160;&#160;&#160; Calling-Station-Id = &quot;1001&quot;
+sA&gt; &#160;&#160;&#160;&#160;&#160;&#160;&#160; Called-Station-Id = &quot;1000&quot;
+sA&gt; &#160;&#160;&#160;&#160;&#160;&#160;&#160; Cisco-NAS-Port = &quot;SIP/1001-089efee8&quot; 
+sA&gt; &#160;&#160;&#160;&#160;&#160;&#160;&#160; Cisco-AVPair = &quot;call-codec=ulaw;useragent=X-Lite release 1011s stamp 41150;&quot;
+sA&gt; &#160;&#160;&#160;&#160;&#160;&#160;&#160; h323-call-origin = &quot;originate&quot;
+sA&gt; &#160;&#160;&#160;&#160;&#160;&#160;&#160; User-Name = &quot;1001&quot;
+sA&gt; &#160;&#160;&#160;&#160;&#160;&#160;&#160; NAS-Identifier = &quot;Asterisk&quot; 
+sA&gt; &#160;&#160;&#160;&#160;&#160;&#160;&#160; Framed-IP-Address = 192.168.1.33
+sA&gt; &#160;&#160;&#160;&#160;&#160;&#160;&#160; NAS-IP-Address = 127.0.0.1
+sA&gt; &#160;&#160;&#160;&#160;&#160;&#160;&#160; NAS-Port = 5060
+sA&gt; &#160;&#160;&#160;&#160;&#160;&#160;&#160; h323-conf-id = &quot;Y2U1MWRhNjQyMzM0ZTFjNWQzMjU3YWNjMWMxZmZkNTQ.&quot; 
+
+sA&gt; &#160; Processing the authorize section of radiusd.conf
+
+sA&gt; modcall: entering group authorize for request 13
+sA&gt; &#160; modcall[authorize]: module &quot;preprocess&quot; returns ok for request 13
+sA&gt; &#160; modcall[authorize]: module &quot;chap&quot; returns noop for request 13 
+sA&gt; &#160; modcall[authorize]: module &quot;mschap&quot; returns noop for request 13
+sA&gt; &#160; modcall[authorize]: module &quot;digest&quot; returns noop for request 13
+sA&gt; &#160;&#160;&#160; rlm_realm: No '@' in User-Name = &quot;1001&quot;, looking up realm NULL 
+sA&gt; &#160;&#160;&#160; rlm_realm: No such realm &quot;NULL&quot;
+sA&gt; &#160; modcall[authorize]: module &quot;suffix&quot; returns noop for request 13
+sA&gt; &#160; rlm_eap: No EAP-Message, not doing EAP
+sA&gt; &#160; modcall[authorize]: module &quot;eap&quot; returns noop for request 13 
+
+sA&gt; rlm_sql (sql): Released sql socket id: 0
+sA&gt; &#160; modcall[authorize]: module &quot;sql&quot; returns ok for request 13
+sA&gt; rlm_pap: WARNING! No &quot;known good&quot; password found for the user.&#160;
+sA&gt; Authentication may fail because of this. 
+sA&gt; &#160; modcall[authorize]: module &quot;pap&quot; returns noop for request 13
+sA&gt; modcall: leaving group authorize (returns ok) for request 13
+sA&gt; auth: No authenticate method (Auth-Type) configuration found for the request: Rejecting the user
+sA&gt; auth: Failed to validate the user.
+
+sA&gt; Delaying request 13 for 1 seconds
+sA&gt; Finished request 13
+sA&gt; Going to the next request
+sA&gt; --- Walking the entire request list ---
+sA&gt;  Sending Access-Reject of id 49 to 127.0.0.1 port 32921
+sA&gt; Waking up in 1 seconds...
+sA&gt; --- Walking the entire request list ---
+sA&gt; Waking up in 1 seconds...
+sA&gt; --- Walking the entire request list --- 
+sA&gt; Sending Access-Reject of id 50 to 127.0.0.1 port 32921
+sA&gt; Waking up in 2 seconds...
+sA&gt; --- Walking the entire request list --- 
+sA&gt; Cleaning up request 12 ID 49 with timestamp 4700e59d
+sA&gt; Waking up in 2 seconds...
+sA&gt; --- Walking the entire request list ---
+sA&gt; Cleaning up request 13 ID 50 with timestamp 4700e59f
+sA&gt; Nothing to do.&#160; Sleeping until we see a request. 
+
+
+sA&gt; Can anybody have any clues?
+
+
+
+
+sA&gt; Thanks and regards 
+sA&gt; Srinivas Antarvedi
+sA&gt;   
+
+
+--
+Mike Tkachuk
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000028.html">[B2bua-users] Running AsteriskB2BUA with freeRADIUS-Help	required
+</A></li>
+	<LI>Next message: <A HREF="000030.html">[B2bua-users] Running AsteriskB2BUA with freeRADIUS-Problem solved
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#29">[ date ]</a>
+              <a href="thread.html#29">[ thread ]</a>
+              <a href="subject.html#29">[ subject ]</a>
+              <a href="author.html#29">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/b2bua-users">More information about the B2bua-users
+mailing list</a><br>
+</body></html>

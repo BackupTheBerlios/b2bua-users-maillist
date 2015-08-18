@@ -1,0 +1,167 @@
+From mike at yes.net.ua  Mon Mar 24 15:27:06 2008
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Mon, 24 Mar 2008 16:27:06 +0200
+Subject: [B2bua-users] performance with b2bua
+In-Reply-To: <348244.90381.qm@web50305.mail.re2.yahoo.com>
+References: <348244.90381.qm@web50305.mail.re2.yahoo.com>
+Message-ID: <76974647.20080324162706@yes.net.ua>
+
+Hello manjula,
+
+ Sorry for late answer.
+ I have a FastAGI version of the scripts in development that
+eliminate the problem with perl. On average specs machine I were able
+to reach really high performance, so agi scripts not a bottleneck
+anymore.
+ On dual core machine with 2g ram > 500 concurent calls.
+ The code working in production but I have not enough time to release
+a patches for newest asterisk versions.
+ But if you really need that I will check what can be done
+
+Wednesday, March 19, 2008 6:40:03 AM, you wrote:
+
+mh> Hello Mike
+
+mh> I am using your programs for some tests now. its
+mh> working ok. 
+
+mh> I have installed *b2bua+billing DB in a Xeon 1GB
+mh> server. I would like to know what is the maxu=imum
+mh> number of SIP concurrent calls that can be handled by
+mh> the *b2bua system.
+
+mh> Are there any bottle-necks as we are using a compiler
+mh> like perl? 
+
+mh> Thanks For your time
+
+mh> Best Regards
+
+mh> Manjula Hettiarachchi
+
+
+mh>      
+mh> ____________________________________________________________________________________
+mh> Looking for last minute shopping deals?  
+mh> Find them fast with Yahoo! Search. 
+mh> http://tools.search.yahoo.com/newsearch/category.php?category=shopping
+
+
+
+--
+Mike Tkachuk
+
+
+
+From mike at yes.net.ua  Wed Mar 26 09:51:17 2008
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Wed, 26 Mar 2008 10:51:17 +0200
+Subject: [B2bua-users] performance with b2bua
+In-Reply-To: <603718.80580.qm@web50304.mail.re2.yahoo.com>
+References: <76974647.20080324162706@yes.net.ua>
+	<603718.80580.qm@web50304.mail.re2.yahoo.com>
+Message-ID: <1164280247.20080326105117@yes.net.ua>
+
+Hello manjula,
+
+ Yes, the code organization is the same but because the code will be
+persistent in the memory you should carefully handle existence of all
+objects, eg. database connection handling etc.
+
+Tuesday, March 25, 2008 3:36:19 PM, you wrote:
+
+mh> Hello Mike,
+
+mh> Thanks for the reply.  I have done many modifications
+mh> to the perl program to handle many special
+mh> requirements that i have. WIll I be able to do same
+mh> with the new *b2bua?
+
+mh> Since its perl i have been able to access the Database
+mh> from inside the b2bua.pl and do many more things
+mh> required by my system.
+
+mh> Also what would be the rough capacity of the current
+mh> perl based b2bua?
+
+
+mh> Thanks in advance
+
+mh> Manjula
+
+mh> --- Mike Tkachuk <mike at yes.net.ua> wrote:
+
+>> Hello manjula,
+>> 
+>>  Sorry for late answer.
+>>  I have a FastAGI version of the scripts in
+>> development that
+>> eliminate the problem with perl. On average specs
+>> machine I were able
+>> to reach really high performance, so agi scripts not
+>> a bottleneck
+>> anymore.
+>>  On dual core machine with 2g ram > 500 concurent
+>> calls.
+>>  The code working in production but I have not
+>> enough time to release
+>> a patches for newest asterisk versions.
+>>  But if you really need that I will check what can
+>> be done
+>> 
+>> Wednesday, March 19, 2008 6:40:03 AM, you wrote:
+>> 
+>> mh> Hello Mike
+>> 
+>> mh> I am using your programs for some tests now. its
+>> mh> working ok. 
+>> 
+>> mh> I have installed *b2bua+billing DB in a Xeon 1GB
+>> mh> server. I would like to know what is the
+>> maxu=imum
+>> mh> number of SIP concurrent calls that can be
+>> handled by
+>> mh> the *b2bua system.
+>> 
+>> mh> Are there any bottle-necks as we are using a
+>> compiler
+>> mh> like perl? 
+>> 
+>> mh> Thanks For your time
+>> 
+>> mh> Best Regards
+>> 
+>> mh> Manjula Hettiarachchi
+>> 
+>> 
+>> mh>      
+>> mh>
+>>
+mh> ____________________________________________________________________________________
+>> mh> Looking for last minute shopping deals?  
+>> mh> Find them fast with Yahoo! Search. 
+>> mh>
+>>
+mh> http://tools.search.yahoo.com/newsearch/category.php?category=shopping
+>> 
+>> 
+>> 
+>> --
+>> Mike Tkachuk
+>> 
+>> 
+
+
+
+mh>      
+mh> ____________________________________________________________________________________
+mh> Never miss a thing.  Make Yahoo your home page. 
+mh> http://www.yahoo.com/r/hs
+
+
+
+--
+Mike Tkachuk
+
+
+

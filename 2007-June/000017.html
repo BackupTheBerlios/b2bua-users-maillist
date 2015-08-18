@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [B2bua-users] Acct-Delay-Time
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/b2bua-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20Acct-Delay-Time&In-Reply-To=%3CC92D4A34C6B8FC44A10451D881EE1BE7E4183D%40marantz.magenta.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000015.html">
+   <LINK REL="Next"  HREF="000016.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[B2bua-users] Acct-Delay-Time</H1>
+    <B>Miguel Angel Villar</B> 
+    <A HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20Acct-Delay-Time&In-Reply-To=%3CC92D4A34C6B8FC44A10451D881EE1BE7E4183D%40marantz.magenta.local%3E"
+       TITLE="[B2bua-users] Acct-Delay-Time">mavillar at redvoiss.net
+       </A><BR>
+    <I>Mon Jun  4 21:41:11 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000015.html">[B2bua-users] b2bua with ser
+</A></li>
+        <LI>Next message: <A HREF="000016.html">[B2bua-users] Acct-Delay-Time
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#17">[ date ]</a>
+              <a href="thread.html#17">[ thread ]</a>
+              <a href="subject.html#17">[ subject ]</a>
+              <a href="author.html#17">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Mike.
+   I'd been using B2BUA 0.1.2 on my asterisk 1.0.6 for about 2 years and it worked perfect all this time. For that version (0.1.2) I modified the behavior of the Acct-Delay-Time because B2BUA was not using the field correctly. Your code use this field to indicate the answer delay time of calls, but this field should be used to indicate RADIUS server how many seconds the client has been trying to send the record.
+
+<A HREF="http://www.gnu.org/software/radius/manual/html_node/radius_211.html">http://www.gnu.org/software/radius/manual/html_node/radius_211.html</A>
+
+  I just installed a new asterisk (1.4.2) so I patched with B2BUA (0.3.0b).... yes!, I'm a fan of your patch :-)
+  I still see that the new version uses the Acct-Delay-Time in a wrong way so I modified the code again. Maybe you want to apply my mod for future releases and use Acct-Delay-Time as defined, my mod is very simple... take a look to the diff output for the 3 modified files:
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">root at server</A> b2bua]# diff b2bua.pl /usr/src/asterisk-b2bua-0.3.0b/b2bua.pl 
+180d179
+&lt; $attributes{'Acct-Delay-Time'} = 0;
+214a214
+&gt;<i> $acct_attributes{'Acct-Delay-Time'} = 0;
+</I>219c219
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">root at server</A> b2bua]# diff include/library.pm /usr/src/asterisk-b2bua-0.3.0b/include/library.pm 
+264c264
+&lt;   $attributes{'Acct-Delay-Time'} = 0;
+---
+&gt;<i>   $attributes{'Acct-Delay-Time'} = $delay_time;
+</I>
+[<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">root at server</A> b2bua]# diff include/radius.pm /usr/src/asterisk-b2bua-0.3.0b/include/radius.pm 
+130d129
+&lt;     $attributes-&gt;{'Acct-Delay-Time'} = 0;
+147,151d145
+&lt;                         $attributes-&gt;{'Acct-Delay-Time'} = $attributes-&gt;{'Acct-Delay-Time'} + $server-&gt;[3];
+&lt;                         # Clearing old attributes from radius interface
+&lt;                         $self -&gt;clear_attributes();
+&lt;                         # Adding attributes to radius packet
+&lt;                         while ( my ($key, $value) = each(%{$attributes}) ){ $self-&gt;add_attributes({ Name =&gt; $key, Value =&gt; $value }); } 
+
+   I hope that you find this helpfull. Thanks for all your great work.
+
+Regards.
+Miguel.-
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/b2bua-users/attachments/20070604/e9e9da0c/attachment.html">https://lists.berlios.de/pipermail/b2bua-users/attachments/20070604/e9e9da0c/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000015.html">[B2bua-users] b2bua with ser
+</A></li>
+	<LI>Next message: <A HREF="000016.html">[B2bua-users] Acct-Delay-Time
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#17">[ date ]</a>
+              <a href="thread.html#17">[ thread ]</a>
+              <a href="subject.html#17">[ subject ]</a>
+              <a href="author.html#17">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/b2bua-users">More information about the B2bua-users
+mailing list</a><br>
+</body></html>

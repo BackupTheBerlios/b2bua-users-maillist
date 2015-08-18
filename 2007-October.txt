@@ -1,0 +1,643 @@
+From srinivas.antarvedi at gmail.com  Mon Oct  1 14:48:31 2007
+From: srinivas.antarvedi at gmail.com (srinivas Antarvedi)
+Date: Mon, 1 Oct 2007 18:18:31 +0530
+Subject: [B2bua-users] Running AsteriskB2BUA with freeRADIUS-Help required
+Message-ID: <8260fc320710010548m4f79443bk93c062adc35d1b45@mail.gmail.com>
+
+Hello All,
+I am new to this group
+just before this i was working with only openser and radius
+now i moved to  prepaid billing application for that my setup follows like
+
+Asterisk B2BUA-0.3.0b patch installed on asterisk 1.4.2
+and radiusclinet-ng was installed as a radius client
+
+Case 1:
+
+When i tried to send request to radius as i used to did with openser
+ie radcheck values
+                             username Auth-Type Digest
+                             username User-Password pwd
+it is showing it didnt find any corresponding values to the Digest method in
+the request
+and sent Access-Reject Reply
+
+Case 2:
+
+when i tried to remove the Auth-Type it showing it was not found any
+auth-Type and
+sending Access-Reject reply
+
+Asterisk Dump:
+
+ Executing [1000 at default:1] DeadAGI("SIP/1001-089efee8",
+"/usr/local/b2bua/b2bua.pl") in new stack
+                                       -- Launched AGI Script
+/usr/local/b2bua/b2bua.pl
+                                         /usr/local/b2bua/b2bua.pl: Call
+from endpoint 1001 to 1000 DENIED
+                                      -- AGI Script
+/usr/local/b2bua/b2bua.pl completed, returning 0
+
+
+Radius Dump:
+
+rad_recv: Access-Request packet from host 127.0.0.1:32921, id=50, length=239
+        Cisco-Call-Type = "VoIP"
+        Calling-Station-Id = "1001"
+        Called-Station-Id = "1000"
+        Cisco-NAS-Port = "SIP/1001-089efee8"
+        Cisco-AVPair = "call-codec=ulaw;useragent=X-Lite release 1011s stamp
+41150;"
+        h323-call-origin = "originate"
+        User-Name = "1001"
+        NAS-Identifier = "Asterisk"
+        Framed-IP-Address = 192.168.1.33
+        NAS-IP-Address = 127.0.0.1
+        NAS-Port = 5060
+        h323-conf-id = "Y2U1MWRhNjQyMzM0ZTFjNWQzMjU3YWNjMWMxZmZkNTQ."
+
+  Processing the authorize section of radiusd.conf
+
+modcall: entering group authorize for request 13
+  modcall[authorize]: module "preprocess" returns ok for request 13
+  modcall[authorize]: module "chap" returns noop for request 13
+  modcall[authorize]: module "mschap" returns noop for request 13
+  modcall[authorize]: module "digest" returns noop for request 13
+    rlm_realm: No '@' in User-Name = "1001", looking up realm NULL
+    rlm_realm: No such realm "NULL"
+  modcall[authorize]: module "suffix" returns noop for request 13
+  rlm_eap: No EAP-Message, not doing EAP
+  modcall[authorize]: module "eap" returns noop for request 13
+
+rlm_sql (sql): Released sql socket id: 0
+  modcall[authorize]: module "sql" returns ok for request 13
+rlm_pap: WARNING! No "known good" password found for the user.
+Authentication may fail because of this.
+  modcall[authorize]: module "pap" returns noop for request 13
+modcall: leaving group authorize (returns ok) for request 13
+auth: No authenticate method (Auth-Type) configuration found for the
+request: Rejecting the user
+auth: Failed to validate the user.
+
+Delaying request 13 for 1 seconds
+Finished request 13
+Going to the next request
+--- Walking the entire request list ---
+Sending Access-Reject of id 49 to 127.0.0.1 port 32921
+Waking up in 1 seconds...
+--- Walking the entire request list ---
+Waking up in 1 seconds...
+--- Walking the entire request list ---
+Sending Access-Reject of id 50 to 127.0.0.1 port 32921
+Waking up in 2 seconds...
+--- Walking the entire request list ---
+Cleaning up request 12 ID 49 with timestamp 4700e59d
+Waking up in 2 seconds...
+--- Walking the entire request list ---
+Cleaning up request 13 ID 50 with timestamp 4700e59f
+Nothing to do.  Sleeping until we see a request.
+
+
+Can anybody have any clues?
+
+
+
+
+Thanks and regards
+Srinivas Antarvedi
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/b2bua-users/attachments/20071001/286594d0/attachment.html>
+
+From hoathai at ngt.vn  Thu Oct  4 05:53:12 2007
+From: hoathai at ngt.vn (Hoa Thai Duy (NGT))
+Date: Thu, 4 Oct 2007 10:53:12 +0700
+Subject: [B2bua-users] Running AsteriskB2BUA with freeRADIUS-Help
+	required
+In-Reply-To: <8260fc320710010548m4f79443bk93c062adc35d1b45@mail.gmail.com>
+References: <8260fc320710010548m4f79443bk93c062adc35d1b45@mail.gmail.com>
+Message-ID: <018c01c8063a$15ea8520$41bf8f60$@vn>
+
+Antarvedi
+
+ 
+
+Mike's B2BUA don't actually do the authentication (eg. You want to
+authenticate users based on username/password). It use RAD auth just to
+check the "session-time" value returned from RADIUS server.
+
+ 
+
+So in the RADIUS Server, the clause should looks like this
+
+ 
+
+<Realm DEFAULT>
+
+        RewriteUsername s/^([^@]+).*/$1/
+
+        <AuthBy SQL>
+
+                DBSource dbi:mysql:dbname
+
+                DBUsername sqlusername
+
+                DBAuth sqlpassword
+
+            
+
+                AuthSelect select sessiontime(%0,
+'%{cisco-h323-Dialed-Number}');
+
+                AuthColumnDef   0,Session-Timeout,reply
+
+</Realm>
+
+ 
+
+Where sessiontime is a user created SQL database stored function, which
+return the amount of seconds the user is allowed to make call to this
+destination.
+
+ 
+
+Brgds
+
+ 
+
+Hoa
+
+ 
+
+ 
+
+From: b2bua-users-bounces at lists.berlios.de
+[mailto:b2bua-users-bounces at lists.berlios.de] On Behalf Of srinivas
+Antarvedi
+Sent: Monday, October 01, 2007 7:49 PM
+To: b2bua-users at lists.berlios.de
+Subject: [B2bua-users] Running AsteriskB2BUA with freeRADIUS-Help required
+
+ 
+
+Hello All,
+I am new to this group 
+just before this i was working with only openser and radius
+now i moved to  prepaid billing application for that my setup follows like
+
+Asterisk B2BUA-0.3.0b patch installed on asterisk 1.4.2 
+and radiusclinet-ng was installed as a radius client
+
+Case 1:
+
+When i tried to send request to radius as i used to did with openser 
+ie radcheck values
+                             username Auth-Type Digest
+                             username User-Password pwd
+it is showing it didnt find any corresponding values to the Digest method in
+the request 
+and sent Access-Reject Reply
+
+Case 2:
+
+when i tried to remove the Auth-Type it showing it was not found any
+auth-Type and
+sending Access-Reject reply 
+
+Asterisk Dump:
+
+ Executing [1000 at default:1] DeadAGI("SIP/1001-089efee8",
+"/usr/local/b2bua/b2bua.pl") in new stack
+                                       -- Launched AGI Script
+/usr/local/b2bua/b2bua.pl 
+                                         /usr/local/b2bua/b2bua.pl: Call
+from endpoint 1001 to 1000 DENIED
+                                      -- AGI Script
+/usr/local/b2bua/b2bua.pl completed, returning 0
+
+
+Radius Dump:
+
+rad_recv: Access-Request packet from host 127.0.0.1:32921, id=50, length=239
+        Cisco-Call-Type = "VoIP"
+        Calling-Station-Id = "1001"
+        Called-Station-Id = "1000"
+        Cisco-NAS-Port = "SIP/1001-089efee8" 
+        Cisco-AVPair = "call-codec=ulaw;useragent=X-Lite release 1011s stamp
+41150;"
+        h323-call-origin = "originate"
+        User-Name = "1001"
+        NAS-Identifier = "Asterisk" 
+        Framed-IP-Address = 192.168.1.33
+        NAS-IP-Address = 127.0.0.1
+        NAS-Port = 5060
+        h323-conf-id = "Y2U1MWRhNjQyMzM0ZTFjNWQzMjU3YWNjMWMxZmZkNTQ." 
+
+  Processing the authorize section of radiusd.conf
+
+modcall: entering group authorize for request 13
+  modcall[authorize]: module "preprocess" returns ok for request 13
+  modcall[authorize]: module "chap" returns noop for request 13 
+  modcall[authorize]: module "mschap" returns noop for request 13
+  modcall[authorize]: module "digest" returns noop for request 13
+    rlm_realm: No '@' in User-Name = "1001", looking up realm NULL 
+    rlm_realm: No such realm "NULL"
+  modcall[authorize]: module "suffix" returns noop for request 13
+  rlm_eap: No EAP-Message, not doing EAP
+  modcall[authorize]: module "eap" returns noop for request 13 
+
+rlm_sql (sql): Released sql socket id: 0
+  modcall[authorize]: module "sql" returns ok for request 13
+rlm_pap: WARNING! No "known good" password found for the user.
+Authentication may fail because of this. 
+  modcall[authorize]: module "pap" returns noop for request 13
+modcall: leaving group authorize (returns ok) for request 13
+auth: No authenticate method (Auth-Type) configuration found for the
+request: Rejecting the user 
+auth: Failed to validate the user.
+
+Delaying request 13 for 1 seconds
+Finished request 13
+Going to the next request
+--- Walking the entire request list ---
+Sending Access-Reject of id 49 to 127.0.0.1 port 32921
+Waking up in 1 seconds...
+--- Walking the entire request list ---
+Waking up in 1 seconds...
+--- Walking the entire request list --- 
+Sending Access-Reject of id 50 to 127.0.0.1 port 32921
+Waking up in 2 seconds...
+--- Walking the entire request list --- 
+Cleaning up request 12 ID 49 with timestamp 4700e59d
+Waking up in 2 seconds...
+--- Walking the entire request list ---
+Cleaning up request 13 ID 50 with timestamp 4700e59f
+Nothing to do.  Sleeping until we see a request. 
+
+
+Can anybody have any clues?
+
+
+
+
+Thanks and regards 
+Srinivas Antarvedi
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/b2bua-users/attachments/20071004/a6a24827/attachment.html>
+
+From mike at yes.net.ua  Fri Oct  5 17:11:10 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Fri, 5 Oct 2007 18:11:10 +0300
+Subject: [B2bua-users] Running AsteriskB2BUA with freeRADIUS-Help
+	required
+In-Reply-To: <8260fc320710010548m4f79443bk93c062adc35d1b45@mail.gmail.com>
+References: <8260fc320710010548m4f79443bk93c062adc35d1b45@mail.gmail.com>
+Message-ID: <04919425.20071005181110@yes.net.ua>
+
+Hello srinivas,
+
+ There is no digest autorization in B2BUA just because the user agent
+ should be autorized by proxy (SER), the B2BUA is acting as called
+ party (same like: called phone don't try to authorize the callee).
+ You need to assume the call is autorized by a proxy and modify your
+ radius billing logic.
+
+Monday, October 1, 2007 3:48:31 PM, you wrote:
+
+sA> Hello All,
+sA> I am new to this group 
+sA> just before this i was working with only openser and radius
+sA> now i moved to? prepaid billing application for that my setup follows like
+
+sA> Asterisk B2BUA-0.3.0b patch installed on asterisk  1.4.2 
+sA> and radiusclinet-ng was installed as a radius client
+
+sA> Case 1:
+
+sA> When i tried to send request to radius as i used to did with openser 
+sA> ie radcheck values
+sA> ? ? ? ? ? ? ? ? ? ? ? ? ? ?? username Auth-Type Digest
+sA> ???????????????????????????? username User-Password pwd
+sA> it is showing it didnt find any corresponding values to the Digest method in the request
+sA> and sent Access-Reject Reply
+
+sA> Case 2:
+
+sA> when i tried to remove the Auth-Type it showing it was not found any auth-Type and
+sA> sending Access-Reject reply 
+
+sA> Asterisk Dump:
+
+sA> ?Executing [1000 at default:1] DeadAGI("SIP/1001-089efee8",
+sA> "/usr/local/b2bua/b2bua.pl") in new stack
+sA> ?? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? -- Launched AGI Script /usr/local/b2bua/b2bua.pl
+sA> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ??
+sA> /usr/local/b2bua/b2bua.pl: Call from endpoint 1001 to 1000 DENIED
+sA> ?? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?? -- AGI Script
+sA> /usr/local/b2bua/b2bua.pl completed, returning 0
+
+sA>  
+sA> Radius Dump:
+
+sA> rad_recv: Access-Request packet from host  127.0.0.1:32921, id=50, length=239
+sA> ??????? Cisco-Call-Type = "VoIP"
+sA> ??????? Calling-Station-Id = "1001"
+sA> ??????? Called-Station-Id = "1000"
+sA> ??????? Cisco-NAS-Port = "SIP/1001-089efee8" 
+sA> ??????? Cisco-AVPair = "call-codec=ulaw;useragent=X-Lite release 1011s stamp 41150;"
+sA> ??????? h323-call-origin = "originate"
+sA> ??????? User-Name = "1001"
+sA> ??????? NAS-Identifier = "Asterisk" 
+sA> ??????? Framed-IP-Address = 192.168.1.33
+sA> ??????? NAS-IP-Address = 127.0.0.1
+sA> ??????? NAS-Port = 5060
+sA> ??????? h323-conf-id = "Y2U1MWRhNjQyMzM0ZTFjNWQzMjU3YWNjMWMxZmZkNTQ." 
+
+sA> ? Processing the authorize section of radiusd.conf
+
+sA> modcall: entering group authorize for request 13
+sA> ? modcall[authorize]: module "preprocess" returns ok for request 13
+sA> ? modcall[authorize]: module "chap" returns noop for request 13 
+sA> ? modcall[authorize]: module "mschap" returns noop for request 13
+sA> ? modcall[authorize]: module "digest" returns noop for request 13
+sA> ??? rlm_realm: No '@' in User-Name = "1001", looking up realm NULL 
+sA> ??? rlm_realm: No such realm "NULL"
+sA> ? modcall[authorize]: module "suffix" returns noop for request 13
+sA> ? rlm_eap: No EAP-Message, not doing EAP
+sA> ? modcall[authorize]: module "eap" returns noop for request 13 
+
+sA> rlm_sql (sql): Released sql socket id: 0
+sA> ? modcall[authorize]: module "sql" returns ok for request 13
+sA> rlm_pap: WARNING! No "known good" password found for the user.?
+sA> Authentication may fail because of this. 
+sA> ? modcall[authorize]: module "pap" returns noop for request 13
+sA> modcall: leaving group authorize (returns ok) for request 13
+sA> auth: No authenticate method (Auth-Type) configuration found for the request: Rejecting the user
+sA> auth: Failed to validate the user.
+
+sA> Delaying request 13 for 1 seconds
+sA> Finished request 13
+sA> Going to the next request
+sA> --- Walking the entire request list ---
+sA>  Sending Access-Reject of id 49 to 127.0.0.1 port 32921
+sA> Waking up in 1 seconds...
+sA> --- Walking the entire request list ---
+sA> Waking up in 1 seconds...
+sA> --- Walking the entire request list --- 
+sA> Sending Access-Reject of id 50 to 127.0.0.1 port 32921
+sA> Waking up in 2 seconds...
+sA> --- Walking the entire request list --- 
+sA> Cleaning up request 12 ID 49 with timestamp 4700e59d
+sA> Waking up in 2 seconds...
+sA> --- Walking the entire request list ---
+sA> Cleaning up request 13 ID 50 with timestamp 4700e59f
+sA> Nothing to do.? Sleeping until we see a request. 
+
+
+sA> Can anybody have any clues?
+
+
+
+
+sA> Thanks and regards 
+sA> Srinivas Antarvedi
+sA>   
+
+
+--
+Mike Tkachuk
+
+
+
+From srinivas.antarvedi at gmail.com  Mon Oct  8 07:28:03 2007
+From: srinivas.antarvedi at gmail.com (srinivas Antarvedi)
+Date: Mon, 8 Oct 2007 10:58:03 +0530
+Subject: [B2bua-users] Running AsteriskB2BUA with freeRADIUS-Problem solved
+Message-ID: <8260fc320710072228x16553018yb18fcccbcbf501e7@mail.gmail.com>
+
+Hello Mike,
+Thank you very much for your valuable reply.
+
+Actually my working setup was like this
+
+1)openser doing authentication
+2)asterisk+b2bua for call controlling using radius
+
+I made the following implementations to make it work
+
+in radreply table i added the following 2 attributes against the
+Called party.
+                   Session-Timeout=some fixed no of seconds
+                  Acct-Interim-Update=60(default min provided by freeradius)
+
+So using the Session-Timeout value returned from the  radius  asterisk
+allowing
+him to call for that many maximum seconds and if the limit exceeds it
+terminates
+the call
+
+my question is:
+
+There is no backward reflection in the Session-Timeout value in the radius
+table
+so that when a new call is made by this same called party the old hardcoded
+value
+it is using .
+
+Is there any way i can decrement this Session-Timeout value as
+     updated Session-Timeout value =(Previous Session-Timeout) -(Last call
+billable seconds)
+
+some of my friend giving advice to go ahead with CDRTool
+does this helpful for my above requirements?
+
+Kindly reply back
+
+Thanks in advance
+srinivas antarvedi
+
+-- 
+Srinivas Antarvedi
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/b2bua-users/attachments/20071008/b2c6c0bb/attachment.html>
+
+From nhadie at tbgi.net.ph  Wed Oct 10 16:27:38 2007
+From: nhadie at tbgi.net.ph (Nhadie)
+Date: Wed, 10 Oct 2007 22:27:38 +0800
+Subject: [B2bua-users] What versions are compatible?
+Message-ID: <20071010140313.7772B10607E@mail.berlios.de>
+
+Hi All,
+
+Would just like to inquire versions are working for you guys:
+
+I tried asterisk 1.2.4 and asterisk b2bua version asterisk-b2bua-0.2.0b2
+
+but when i patched asterisk with the patch in b2bua i get these errors:
+
+patching file apps/Makefile
+patching file apps/app_dial.c
+Hunk #1 succeeded at 218 (offset 8 lines).
+Hunk #3 succeeded at 555 (offset 14 lines).
+Hunk #4 FAILED at 994.
+Hunk #5 succeeded at 1097 (offset 53 lines).
+1 out of 5 hunks FAILED -- saving rejects to file apps/app_dial.c.rej
+patching file apps/app_getchannelstate.c
+patching file channels/chan_sip.c
+Hunk #1 FAILED at 2055.
+Hunk #2 succeeded at 2891 (offset 69 lines).
+Hunk #3 succeeded at 10084 (offset 293 lines).
+1 out of 3 hunks FAILED -- saving rejects to file channels/chan_sip.c.rej
+
+
+i also tried asterisk-b2bua-0.3.0b but i also had error when patching
+asterisk. thank you
+
+regards,
+nhadie
+
+________________________________________________
+Message sent using UebiMiau 2.7
+
+
+
+From mike at yes.net.ua  Tue Oct  9 10:25:08 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Tue, 9 Oct 2007 11:25:08 +0300
+Subject: [B2bua-users] B2bua
+In-Reply-To: <8260fc320710052119h23728063pba7cbe6678f181f@mail.gmail.com>
+References: <8260fc320710052119h23728063pba7cbe6678f181f@mail.gmail.com>
+Message-ID: <1998442436.20071009112508@yes.net.ua>
+
+Hello srinivas,
+
+ Sorry for delayed answer.
+ *B2BUA sends authorization request and than Accounting-Start and
+ Accounting-Stop, this usually is enough to do accurate billing.
+ 
+ Asterisk don't maintain call state if there is no media passing over
+ asterisk and the gateways crashed (or Internet uplink problems),
+ alternatively you can setup rtp timeout, but then you will need to
+ proxy all media.
+
+ Acct-Interim-Update is used to initiate sending accounting updates,
+ it mainly used to be sure that asterisk is running and not crashed. It
+ don't maintain call state (i.e. it won't increase session-time when
+ call is connected) due to asterisk architecture.
+ So probably you can send Access request without Acct-Interim-Update
+ attribute. 
+ Due to radius protocol limitation YOU CANNOT send any reply with
+ accounting reply packet, so you cannot update Session-Timeout from
+ accounting packets.
+
+ 
+Saturday, October 6, 2007 7:19:48 AM, you wrote:
+
+sA> Hello mike,
+
+sA> Thanks for your valuable reply
+
+sA> i have understood that radius with the asterisk-b2bua do only 
+sA> action of? getting? Session-Timeout & Acct-Interim-Update.
+sA> so i have tested the setup by doing authentication using openser and 
+sA> i was successfull
+
+sA> thanks for your kind cooperation 
+
+sA> and one more doubt i have is 
+
+sA> problem:
+
+sA> Suppose i have 200 minutes of talktime in my service.
+sA> i can put this 200 numeral into the radreply table against the 
+sA> designated user. 
+sA> So when Access-Request goes to radius
+sA> it responds with this 200 numeral in its Session-Timeout
+sA> variable .
+sA> So asterisk uses it in dial application in "S" option
+sA> to have control over the session 
+
+sA> the doubts i have are
+
+sA> 1)How asterisk maintains the state i.e.
+sA> ?? will it issue reinvites during the session ?
+sA> ?? (mediaproxying ?)
+
+sA> 2)What is the precise use of the Acct-Interim-Update?
+sA> my understanding is as follows: 
+sA> with above 200 numeral as the Session-Timeout Asterisk
+sA> bridges the call and if the session ends before 200 value
+sA> there should be some mechanism that manipulates the Session-Timeout
+sA> variable(decrement) at the radius table and if so that the NEXT CALL can be started with
+sA> a timeout equal to This Fresh Session-Timeout value .
+
+sA> to get this updated Session-Timeout value only we are using Acct-Interim-Update
+
+sA> this was my understanding regarding doubt no :2
+sA> if i am wrong just letme know 
+
+sA> Thanks and regards 
+sA> Srinivas Antarvedi
+sA>   
+
+
+--
+Mike Tkachuk
+
+
+
+From mike at yes.net.ua  Thu Oct 11 13:17:31 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Thu, 11 Oct 2007 14:17:31 +0300
+Subject: [B2bua-users] Prepaid Solution --help required
+In-Reply-To: <8260fc320710100001y37a8a49fye3f16a8236aa7ff2@mail.gmail.com>
+References: <8260fc320710100001y37a8a49fye3f16a8236aa7ff2@mail.gmail.com>
+Message-ID: <1989916778.20071011141731@yes.net.ua>
+
+Hello srinivas,
+
+ I've never used CDRTool for billing purposes.
+ As I know CDRTool is just analyzer of data provided from SER
+ Mediaproxy module, also you can analyze that data yourself.
+ Mediaproxy doing "call cutoff" in a bit wrong way - it just stop
+ forwarding RTP data between instead of sending BYE,
+ so user should hangup himself because no sound, maybe it will
+ change if mediaproxy will start using ser dialog module,
+
+ I use *B2BUA because it's much more flexible and I have some
+ additional services based on asterisk, like voicemail, DID numbers routing
+ etc.
+
+Wednesday, October 10, 2007 10:01:30 AM, you wrote:
+
+sA> Hello Mike,
+
+sA> Thank you very much for your valuable reply regarding b2bua+radius 
+sA> attributes .
+
+sA> Actually i am looking at the prepaid solution using openser
+sA> some users telling to go for CDRTool. 
+
+sA> Do you have any idea ragarding CDRTool 
+sA> i have seen the documentation of this CDRTool but
+sA> unable to understand the call flow because it embedded with
+sA> somany datasources and all stuff and there is no documentation 
+sA> available for it on the search also 
+
+sA> and one more doubt i have is if we want it to use do we need
+sA> a licence?
+
+sA> just help me out regarding this 
+
+
+
+
+--
+Mike Tkachuk
+
+
+

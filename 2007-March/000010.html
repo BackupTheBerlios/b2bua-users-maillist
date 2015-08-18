@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [B2bua-users] [Serusers] SER + Prepaid with Radius AAA.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/b2bua-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20%5BSerusers%5D%20SER%20%2B%20Prepaid%20with%20Radius%20AAA.&In-Reply-To=%3C302256466.20070329132853%40yes.net.ua%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000009.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[B2bua-users] [Serusers] SER + Prepaid with Radius AAA.</H1>
+    <B>Mike Tkachuk</B> 
+    <A HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20%5BSerusers%5D%20SER%20%2B%20Prepaid%20with%20Radius%20AAA.&In-Reply-To=%3C302256466.20070329132853%40yes.net.ua%3E"
+       TITLE="[B2bua-users] [Serusers] SER + Prepaid with Radius AAA.">mike at yes.net.ua
+       </A><BR>
+    <I>Thu Mar 29 12:28:53 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000009.html">[B2bua-users] why b2bua always relay 403
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#10">[ date ]</a>
+              <a href="thread.html#10">[ thread ]</a>
+              <a href="subject.html#10">[ subject ]</a>
+              <a href="author.html#10">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Shafraz,
+
+  I think you can get more than 200 concurent calls, but I doubt about
+  asterisk stability itself.
+  *B2BUA code is too dumb to have some problems.
+
+Wednesday, March 28, 2007 5:47:54 PM, you wrote:
+
+ST&gt; Using Asterisk B2BUA, WITHOUT RTP Proxying, How many concurrent calls will I
+ST&gt; be able to squeeze through without compromising on Stability? Advise much
+ST&gt; appreciated.
+
+ST&gt; Warm Regards,
+ST&gt; Shafraz Thawfeek
+
+ST&gt; -----Original Message-----
+ST&gt; From: Mike Tkachuk [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">mike at yes.net.ua</A>] 
+ST&gt; Sent: Tuesday, March 27, 2007 1:57 PM
+ST&gt; To: Shafraz Thawfeek
+ST&gt; Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">serusers at lists.iptel.org</A>
+ST&gt; Subject: Re[2]: [Serusers] SER + Prepaid with Radius AAA.
+
+ST&gt; Hello Shafraz,
+
+ST&gt;  I'm able to reach ~ 200 concurrent calls with RTP proxied on such hardware:
+ST&gt;  Dell 860, Xeon 3060, 2G RAM
+ST&gt;  Freebsd 6.2, Asterisk 1.4
+ST&gt;  If you will use SER dispatcher module you can add virtually unlimited
+ST&gt;  amount of *B2BUA machines.
+
+ST&gt; Tuesday, March 27, 2007 10:55:46 AM, you wrote:
+
+ST&gt;&gt;     
+ST&gt;&gt;   
+ST&gt;&gt;   
+ST&gt;&gt;   
+ST&gt;&gt; Hello All,
+ST&gt;&gt;   
+ST&gt;&gt; &#160;
+ST&gt;&gt;   
+ST&gt;&gt; Thank you for the replies again. I would like to know, in case I
+ST&gt;&gt; decide to go with Asterisk B2BUA, how would the performance,
+ST&gt;&gt; stability be? and most importantly, how would the scalability be?
+ST&gt;&gt; I?m not planning to route media via the *box, in that case, how
+ST&gt;&gt; many simultaneous calls would I be able to get considering my hardware
+ST&gt; is of high spec.
+ST&gt;&gt;   
+ST&gt;&gt; &#160;
+ST&gt;&gt;   
+ST&gt;&gt; Also, I would like to know, has anyone tried using Yate for such
+ST&gt;&gt; a scenario? Perhaps as a B2BUA, or Standonle with or without SER to do
+ST&gt; prepaid?
+ST&gt;&gt;   
+ST&gt;&gt; &#160;
+ST&gt;&gt;   
+ST&gt;&gt; Regards
+ST&gt;&gt;   
+ST&gt;&gt;   
+ST&gt;&gt; Shaf.
+ST&gt;&gt;  
+ST&gt;&gt;  
+ST&gt;&gt;   
+ST&gt;&gt;   
+ST&gt;&gt;   
+ST&gt;&gt; From: sip [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">sip at arcdiv.com</A>] 
+ST&gt;&gt;  Sent: Wednesday, March 21, 2007 5:08 PM
+ST&gt;&gt;  To: Shafraz Thawfeek; <A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">serusers at lists.iptel.org</A>
+ST&gt;&gt;  Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">serusers at iptel.org</A>
+ST&gt;&gt;  Subject: Re: [Serusers] SER + Prepaid with Radius AAA.
+ST&gt;&gt;   
+ST&gt;&gt;   
+ST&gt;&gt;   
+ST&gt;&gt; &#160;
+ST&gt;&gt;   
+ST&gt;&gt; You are correct. There are several workarounds for this, but for
+ST&gt;&gt; the most part, what you need is some sort of B2BUA functionality.&#160;
+ST&gt;&gt; Essentially, the call needs to go through a UAS that DOES keep
+ST&gt;&gt; track.&#160; The new SEMS is supposed to have some of this
+ST&gt;&gt; functionality, although I don't know much about it.&#160; Some people
+ST&gt;&gt; use Asterisk (with Asterisk B2BUA).&#160; We ended up writing our own
+ST&gt;&gt; Asterisk B2BUA as the Asterisk B2BUA code from sourceforge had
+ST&gt;&gt; things in it we neither wanted nor used and their patches never
+ST&gt;&gt; seem to be up to date on the later versions of Asterisk (current
+ST&gt;&gt; code out there works in a guaranteed way only for Asterisk 1.2.1,
+ST&gt;&gt; though it wasn't until after 1.2.9.1 that we had to seriously
+ST&gt;&gt; rewrite the patch). The sourceforge code works, though, for
+ST&gt;&gt; earlier versions of Asterisk, and is an excellent starting place
+ST&gt;&gt; if you've little desire to write the whole thing yourself. 
+ST&gt;&gt;  
+ST&gt;&gt;  The concept of using Asterisk is pretty simple:&#160; call gets
+ST&gt;&gt; forwarded from SER to an Asterisk AGI program (C, Perl, etc) that
+ST&gt;&gt; does all the magic.&#160; The easiest way is to do a balance check when
+ST&gt;&gt; the call comes in to determine the cost of the outgoing call and
+ST&gt;&gt; check how much time a person has left on the call based on how
+ST&gt;&gt; much money is in their account. Then, just set up an Asterisk Dial
+ST&gt;&gt; command with the appropriate timeout and let the server take care
+ST&gt;&gt; of the rest.&#160; There are tricks to this, of course. Unless you're
+ST&gt;&gt; somehow updating call credit and call timeout on the fly, you'll
+ST&gt;&gt; need to limit the incoming calls to one at a time for each
+ST&gt;&gt; account, or it's easy for someone to call with multiple phones and rob
+ST&gt; you of cash.
+ST&gt;&gt;  
+ST&gt;&gt;  N. 
+ST&gt;&gt;  
+ST&gt;&gt;  
+ST&gt;&gt;  On Wed, 21 Mar 2007 12:27:27 +0530, Shafraz Thawfeek wrote 
+ &gt;&gt;&gt; Hello All, 
+ &gt;&gt;&gt; &#160; 
+ &gt;&gt;&gt; Its really feels nice to have joined the list. I'm in the process of
+ST&gt; deploying a SER based solution for prepaid users. We're using a FreeRadius
+ST&gt; based billing solution from a provider. If I'm not mistaken, SER is not
+ST&gt; aware of the call state, what this means to me is, in case the user account
+ST&gt; on the radius runs out of credit, SER will not know about it and will not be
+ST&gt; able to disconnect the call. Am I correct on this? 
+ &gt;&gt;&gt; &#160; 
+ &gt;&gt;&gt; If I am correct, I would like to know what would be the workaround for
+ST&gt; this? I'm I am wrong, then I would like to know on how we could get the call
+ST&gt; disconnection working? 
+ &gt;&gt;&gt; &#160; 
+ &gt;&gt;&gt; I have a Nextone which would be sitting in front of the SER and acting
+ST&gt; as a Mirror Proxy for SER. The purpose of this is to overcome NAT traversal
+ST&gt; issues and free SER from that. Nextone doesn?t understand or talk radius.
+ST&gt; SER will be the registrar and handle AAA. The user call will be sent back
+ST&gt; into the Nextone and then terminated from there. SER will not be handling
+ST&gt; media. If to get my disconnect upon credit exhaust scenario working, what
+ST&gt; changes should I introduce into my existing network model? 
+ &gt;&gt;&gt; &#160; 
+ &gt;&gt;&gt; Thank you. 
+ &gt;&gt;&gt; Shaf. 
+ &gt;&gt;&gt; &#160; 
+ &gt;&gt;&gt; &#160; 
+ST&gt;&gt;  
+ST&gt;&gt;  
+ST&gt;&gt;   
+ST&gt;&gt;   
+ST&gt;&gt;     
+
+
+ST&gt; --
+ST&gt; Mike Tkachuk
+
+
+
+--
+Mike Tkachuk
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000009.html">[B2bua-users] why b2bua always relay 403
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#10">[ date ]</a>
+              <a href="thread.html#10">[ thread ]</a>
+              <a href="subject.html#10">[ subject ]</a>
+              <a href="author.html#10">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/b2bua-users">More information about the B2bua-users
+mailing list</a><br>
+</body></html>

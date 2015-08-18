@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [B2bua-users] Acct-Delay-Time
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/b2bua-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20Acct-Delay-Time&In-Reply-To=%3C1487181857.20070605123402%40yes.net.ua%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000016.html">
+   <LINK REL="Next"  HREF="000019.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[B2bua-users] Acct-Delay-Time</H1>
+    <B>Mike Tkachuk</B> 
+    <A HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20Acct-Delay-Time&In-Reply-To=%3C1487181857.20070605123402%40yes.net.ua%3E"
+       TITLE="[B2bua-users] Acct-Delay-Time">mike at yes.net.ua
+       </A><BR>
+    <I>Tue Jun  5 11:34:02 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000016.html">[B2bua-users] Acct-Delay-Time
+</A></li>
+        <LI>Next message: <A HREF="000019.html">[B2bua-users] Acct-Delay-Time
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#18">[ date ]</a>
+              <a href="thread.html#18">[ thread ]</a>
+              <a href="subject.html#18">[ subject ]</a>
+              <a href="author.html#18">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Miguel,
+
+Thanks for the note.
+Can you suggest another attribute to indicate answer delay of the
+call?
+
+Monday, June 4, 2007 11:25:54 PM, you wrote:
+
+MAV&gt;    
+MAV&gt;    
+MAV&gt; Hi Mike.  
+MAV&gt; &#160;&#160; I'd been using B2BUA 0.1.2 on my asterisk 1.0.6 for about 2
+MAV&gt; years and it worked perfect all this time. For that version
+MAV&gt; (0.1.2) I modified the behavior of the Acct-Delay-Time because
+MAV&gt; B2BUA was not using the field correctly. Your code use this field
+MAV&gt; to indicate the answer delay time of calls, but this field should
+MAV&gt; be used to indicate RADIUS server how many seconds the client has been trying to send the record.
+MAV&gt;   
+MAV&gt; <A HREF="http://www.gnu.org/software/radius/manual/html_node/radius_211.html">http://www.gnu.org/software/radius/manual/html_node/radius_211.html</A> 
+MAV&gt;   
+MAV&gt; &#160; I just installed a new asterisk (1.4.2) so I patched with
+MAV&gt; B2BUA (0.3.0b).... yes!, I'm a fan of your patch :-)  
+MAV&gt; &#160; I still see that the new version uses the Acct-Delay-Time in a
+MAV&gt; wrong way so I modified the code again. Maybe you want to apply
+MAV&gt; my mod for future releases and use Acct-Delay-Time as defined, my
+MAV&gt; mod is very simple... take a look to the diff output for the 3 modified files:
+MAV&gt;   
+MAV&gt; [<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">root at server</A> b2bua]# diff b2bua.pl
+MAV&gt; /usr/src/asterisk-b2bua-0.3.0b/b2bua.pl   
+MAV&gt; 180d179  
+MAV&gt; &lt; $attributes{'Acct-Delay-Time'} = 0;  
+MAV&gt; 214a214  
+&gt;&gt;<i> $acct_attributes{'Acct-Delay-Time'} = 0;  
+</I>MAV&gt; 219c219 
+MAV&gt;   
+MAV&gt; [<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">root at server</A> b2bua]# diff include/library.pm
+MAV&gt; /usr/src/asterisk-b2bua-0.3.0b/include/library.pm   
+MAV&gt; 264c264  
+MAV&gt; &lt;&#160;&#160; $attributes{'Acct-Delay-Time'} = 0;  
+MAV&gt; ---  
+&gt;&gt;<i>&#160;&#160; $attributes{'Acct-Delay-Time'} = $delay_time; 
+</I>MAV&gt;   
+MAV&gt; [<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">root at server</A> b2bua]# diff include/radius.pm
+MAV&gt; /usr/src/asterisk-b2bua-0.3.0b/include/radius.pm   
+MAV&gt; 130d129  
+MAV&gt; &lt;&#160;&#160;&#160;&#160; $attributes-&gt;{'Acct-Delay-Time'} = 0;  
+MAV&gt; 147,151d145  
+MAV&gt; &lt;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; $attributes-&gt;{'Acct-Delay-Time'} =
+MAV&gt; $attributes-&gt;{'Acct-Delay-Time'} + $server-&gt;[3];  
+MAV&gt; &lt;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; # Clearing old attributes from radius interface
+MAV&gt; &lt;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; $self -&gt;clear_attributes();  
+MAV&gt; &lt;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; # Adding attributes to radius packet  
+MAV&gt; &lt;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; while ( my ($key, $value) =
+MAV&gt; each(%{$attributes}) ){ $self-&gt;add_attributes({ Name =&gt; $key, Value =&gt; $value }); }
+MAV&gt;   
+MAV&gt; &#160;&#160; I hope that you find this helpfull. Thanks for all your great work.
+MAV&gt;   
+MAV&gt; Regards.  
+MAV&gt; Miguel.- 
+MAV&gt;   
+MAV&gt;    
+
+
+--
+Mike Tkachuk
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000016.html">[B2bua-users] Acct-Delay-Time
+</A></li>
+	<LI>Next message: <A HREF="000019.html">[B2bua-users] Acct-Delay-Time
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#18">[ date ]</a>
+              <a href="thread.html#18">[ thread ]</a>
+              <a href="subject.html#18">[ subject ]</a>
+              <a href="author.html#18">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/b2bua-users">More information about the B2bua-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,28 @@
+From manjula_55 at yahoo.com  Fri Jul 27 04:36:27 2007
+From: manjula_55 at yahoo.com (manjula hettiarachchi)
+Date: Thu, 26 Jul 2007 19:36:27 -0700 (PDT)
+Subject: [B2bua-users] Authentication /Authorization by Framed-ip-address
+Message-ID: <854574.57823.qm@web50308.mail.re2.yahoo.com>
+
+Hello
+
+I am using b2bua with asterisk for endpoint auth. Its
+working fine for endpoints that authenticate with ID.
+
+I want  to accept calls coming in from another
+Asterisk box, where b2b does not authenticate its IP.
+
+How do i make b2bua auth for 'Framed-IP-Address'
+
+THanks in advance
+
+Manjula Hettiarachchi 
+
+
+       
+____________________________________________________________________________________
+Need a vacation? Get great deals
+to amazing places on Yahoo! Travel.
+http://travel.yahoo.com/
+
+

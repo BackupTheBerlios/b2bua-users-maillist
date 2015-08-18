@@ -1,0 +1,320 @@
+From nhadie at tbgi.net.ph  Thu Mar 15 10:42:47 2007
+From: nhadie at tbgi.net.ph (Ronald)
+Date: Thu, 15 Mar 2007 17:42:47 +0800
+Subject: [B2bua-users]  Latest Stable Version
+In-Reply-To: <2510573836.20070216104624@yes.net.ua>
+References: <1037783020.20070215104744@yes.net.ua>	<269799.22229.qm@web50305.mail.yahoo.com>
+	<2510573836.20070216104624@yes.net.ua>
+Message-ID: <45F91517.8080806@tbgi.net.ph>
+
+hi,
+
+What's the latest stable version of asterisk-b2bua that i can use, and 
+what version of asterisk it supports?
+
+thank you
+regards,
+ronald
+
+
+From hoathai at vngt.vn  Thu Mar 22 12:39:48 2007
+From: hoathai at vngt.vn (Hoa Thai Duy)
+Date: Thu, 22 Mar 2007 18:39:48 +0700
+Subject: [B2bua-users] Porting to Asterisk 1.4
+In-Reply-To: <427866090.20070215104606@yes.net.ua>
+References: <mailman.105.1165489274.25885.b2bua-users@lists.berlios.de>
+	<cfbb389b0612070502sfd1581eh46def229f1e0be51@mail.gmail.com>
+	<010001c74e7d$2e3b5f70$5703d67d@hangla>
+	<427866090.20070215104606@yes.net.ua>
+Message-ID: <031e01c76c76$cc508c00$1405d67d@hangla>
+
+Dear Mike
+
+1.4.2 is out, how about yours :-)?
+
+Brgds
+
+Hoa
+
+-----Original Message-----
+From: Mike Tkachuk [mailto:mike at yes.net.ua] 
+Sent: Thursday, February 15, 2007 3:46 PM
+To: Hoa Thai Duy
+Cc: b2bua-users at lists.berlios.de
+Subject: Re: [B2bua-users] Porting to Asterisk 1.4
+
+Hello Hoa,
+
+New updated version will be released probably with asterisk 1.4.1.
+Current version of asterisk 1.4 don't fulfill my needs - it's too
+unstable.
+
+Monday, February 12, 2007 10:09:55 AM, you wrote:
+
+HTD>     
+HTD>   
+HTD>   
+HTD> Mike
+HTD>   
+HTD> ?
+HTD>   
+HTD> Do you intend to port the scripts and patch to 1.4?
+HTD>   
+HTD> ?
+HTD>   
+HTD> Brgds
+HTD>   
+HTD> ?
+HTD>   
+HTD>   
+HTD> Hoa
+HTD>   
+HTD>   
+HTD> ?
+HTD>   
+HTD>   
+HTD>     
+
+
+--
+Mike Tkachuk
+
+
+
+
+
+From mike at yes.net.ua  Thu Mar 22 17:12:17 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Thu, 22 Mar 2007 18:12:17 +0200
+Subject: [B2bua-users] New release asterisk-b2bua-0.3.0b
+Message-ID: <699687772.20070322181217@yes.net.ua>
+
+Hello *B2BUA Users,
+
+ I'd like to say you that new BETA version of Asterisk B2BUA 0.3.0 is out,
+ I'm currently testing it in production.
+ 
+ Some major changes:
+  * Big code rewriting
+  * Asterisk 1.4.2 support
+
+ *B2BUA mailing list is open for any updates, don't hesitate to ask
+ anything there.
+
+--
+Mike Tkachuk
+
+
+
+From bestilmy at yahoo.com.cn  Wed Mar 28 09:13:21 2007
+From: bestilmy at yahoo.com.cn (=?gb2312?q?=D0=C7=D3=EE=20=C1=F5?=)
+Date: Wed, 28 Mar 2007 15:13:21 +0800 (CST)
+Subject: [B2bua-users] why b2bua always relay 403
+Message-ID: <458876.93374.qm@web15610.mail.cnb.yahoo.com>
+
+Dear all
+  I use astersik b2bua and radius for auth and prepaid on pstn call,there is a big problem is that any responese from PSTN GW,for example 486,503...,the bubua always relay 403 to sip client.So i cant make the status clearly when pstn call,what's wrong with my b2bua,any cfg of bubua for me?
+  many many thx.
+
+
+
+ 		
+---------------------------------
+????????-3.5G???20M??? 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/b2bua-users/attachments/20070328/f54a189e/attachment.html>
+
+From mike at yes.net.ua  Thu Mar 29 11:54:29 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Thu, 29 Mar 2007 12:54:29 +0300
+Subject: [B2bua-users] why b2bua always relay 403
+In-Reply-To: <458876.93374.qm@web15610.mail.cnb.yahoo.com>
+References: <458876.93374.qm@web15610.mail.cnb.yahoo.com>
+Message-ID: <859165416.20070329125429@yes.net.ua>
+
+Hello,
+
+  *B2BUA don't act on such low level and don't modify any asterisk
+  behavior regarding forwarding messages, so probably this question
+  should be asked on asterisk maillist.
+  But due to LCR routine, in case of outbound channel fail to connect
+  (503 or 486 error) *b2bua will not hangup a calling channel (and
+  forward that SIP message) but will try to redial or try another peer
+  to connect.
+
+Wednesday, March 28, 2007 10:13:21 AM, you wrote:
+
+????> Dear all
+????>   I use astersik b2bua and radius for auth and prepaid on pstn
+????> call,there is a big problem is that any responese from PSTN GW,for
+????> example 486,503...,the bubua always relay 403 to sip client.So i
+????> cant make the status clearly when pstn call,what's wrong with my b2bua,any cfg of bubua for me?
+????>   many many thx.
+
+
+--
+Mike Tkachuk
+
+
+
+From mike at yes.net.ua  Thu Mar 29 12:28:53 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Thu, 29 Mar 2007 13:28:53 +0300
+Subject: [B2bua-users] [Serusers] SER + Prepaid with Radius AAA.
+In-Reply-To: <001e01c77148$155e3cf0$401ab6d0$@com>
+References: <006f01c76b86$32990fb0$97cb2f10$@com>
+	<20070321112605.M92084@infinideas.com>
+	<016201c77045$56540630$02fc1290$@com>
+	<1034348377.20070327112712@yes.net.ua>
+	<001e01c77148$155e3cf0$401ab6d0$@com>
+Message-ID: <302256466.20070329132853@yes.net.ua>
+
+Hello Shafraz,
+
+  I think you can get more than 200 concurent calls, but I doubt about
+  asterisk stability itself.
+  *B2BUA code is too dumb to have some problems.
+
+Wednesday, March 28, 2007 5:47:54 PM, you wrote:
+
+ST> Using Asterisk B2BUA, WITHOUT RTP Proxying, How many concurrent calls will I
+ST> be able to squeeze through without compromising on Stability? Advise much
+ST> appreciated.
+
+ST> Warm Regards,
+ST> Shafraz Thawfeek
+
+ST> -----Original Message-----
+ST> From: Mike Tkachuk [mailto:mike at yes.net.ua] 
+ST> Sent: Tuesday, March 27, 2007 1:57 PM
+ST> To: Shafraz Thawfeek
+ST> Cc: serusers at lists.iptel.org
+ST> Subject: Re[2]: [Serusers] SER + Prepaid with Radius AAA.
+
+ST> Hello Shafraz,
+
+ST>  I'm able to reach ~ 200 concurrent calls with RTP proxied on such hardware:
+ST>  Dell 860, Xeon 3060, 2G RAM
+ST>  Freebsd 6.2, Asterisk 1.4
+ST>  If you will use SER dispatcher module you can add virtually unlimited
+ST>  amount of *B2BUA machines.
+
+ST> Tuesday, March 27, 2007 10:55:46 AM, you wrote:
+
+ST>>     
+ST>>   
+ST>>   
+ST>>   
+ST>> Hello All,
+ST>>   
+ST>> ?
+ST>>   
+ST>> Thank you for the replies again. I would like to know, in case I
+ST>> decide to go with Asterisk B2BUA, how would the performance,
+ST>> stability be? and most importantly, how would the scalability be?
+ST>> I?m not planning to route media via the *box, in that case, how
+ST>> many simultaneous calls would I be able to get considering my hardware
+ST> is of high spec.
+ST>>   
+ST>> ?
+ST>>   
+ST>> Also, I would like to know, has anyone tried using Yate for such
+ST>> a scenario? Perhaps as a B2BUA, or Standonle with or without SER to do
+ST> prepaid?
+ST>>   
+ST>> ?
+ST>>   
+ST>> Regards
+ST>>   
+ST>>   
+ST>> Shaf.
+ST>>  
+ST>>  
+ST>>   
+ST>>   
+ST>>   
+ST>> From: sip [mailto:sip at arcdiv.com] 
+ST>>  Sent: Wednesday, March 21, 2007 5:08 PM
+ST>>  To: Shafraz Thawfeek; serusers at lists.iptel.org
+ST>>  Cc: serusers at iptel.org
+ST>>  Subject: Re: [Serusers] SER + Prepaid with Radius AAA.
+ST>>   
+ST>>   
+ST>>   
+ST>> ?
+ST>>   
+ST>> You are correct. There are several workarounds for this, but for
+ST>> the most part, what you need is some sort of B2BUA functionality.?
+ST>> Essentially, the call needs to go through a UAS that DOES keep
+ST>> track.? The new SEMS is supposed to have some of this
+ST>> functionality, although I don't know much about it.? Some people
+ST>> use Asterisk (with Asterisk B2BUA).? We ended up writing our own
+ST>> Asterisk B2BUA as the Asterisk B2BUA code from sourceforge had
+ST>> things in it we neither wanted nor used and their patches never
+ST>> seem to be up to date on the later versions of Asterisk (current
+ST>> code out there works in a guaranteed way only for Asterisk 1.2.1,
+ST>> though it wasn't until after 1.2.9.1 that we had to seriously
+ST>> rewrite the patch). The sourceforge code works, though, for
+ST>> earlier versions of Asterisk, and is an excellent starting place
+ST>> if you've little desire to write the whole thing yourself. 
+ST>>  
+ST>>  The concept of using Asterisk is pretty simple:? call gets
+ST>> forwarded from SER to an Asterisk AGI program (C, Perl, etc) that
+ST>> does all the magic.? The easiest way is to do a balance check when
+ST>> the call comes in to determine the cost of the outgoing call and
+ST>> check how much time a person has left on the call based on how
+ST>> much money is in their account. Then, just set up an Asterisk Dial
+ST>> command with the appropriate timeout and let the server take care
+ST>> of the rest.? There are tricks to this, of course. Unless you're
+ST>> somehow updating call credit and call timeout on the fly, you'll
+ST>> need to limit the incoming calls to one at a time for each
+ST>> account, or it's easy for someone to call with multiple phones and rob
+ST> you of cash.
+ST>>  
+ST>>  N. 
+ST>>  
+ST>>  
+ST>>  On Wed, 21 Mar 2007 12:27:27 +0530, Shafraz Thawfeek wrote 
+ >>> Hello All, 
+ >>> ? 
+ >>> Its really feels nice to have joined the list. I'm in the process of
+ST> deploying a SER based solution for prepaid users. We're using a FreeRadius
+ST> based billing solution from a provider. If I'm not mistaken, SER is not
+ST> aware of the call state, what this means to me is, in case the user account
+ST> on the radius runs out of credit, SER will not know about it and will not be
+ST> able to disconnect the call. Am I correct on this? 
+ >>> ? 
+ >>> If I am correct, I would like to know what would be the workaround for
+ST> this? I'm I am wrong, then I would like to know on how we could get the call
+ST> disconnection working? 
+ >>> ? 
+ >>> I have a Nextone which would be sitting in front of the SER and acting
+ST> as a Mirror Proxy for SER. The purpose of this is to overcome NAT traversal
+ST> issues and free SER from that. Nextone doesn?t understand or talk radius.
+ST> SER will be the registrar and handle AAA. The user call will be sent back
+ST> into the Nextone and then terminated from there. SER will not be handling
+ST> media. If to get my disconnect upon credit exhaust scenario working, what
+ST> changes should I introduce into my existing network model? 
+ >>> ? 
+ >>> Thank you. 
+ >>> Shaf. 
+ >>> ? 
+ >>> ? 
+ST>>  
+ST>>  
+ST>>   
+ST>>   
+ST>>     
+
+
+ST> --
+ST> Mike Tkachuk
+
+
+
+--
+Mike Tkachuk
+
+
+

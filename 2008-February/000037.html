@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [B2bua-users] how to do AUth for Framed-IP-Address
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/b2bua-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20how%20to%20do%20AUth%20for%20Framed-IP-Address&In-Reply-To=%3C978879.2186.qm%40web50304.mail.re2.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000038.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[B2bua-users] how to do AUth for Framed-IP-Address</H1>
+    <B>manjula hettiarachchi</B> 
+    <A HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20how%20to%20do%20AUth%20for%20Framed-IP-Address&In-Reply-To=%3C978879.2186.qm%40web50304.mail.re2.yahoo.com%3E"
+       TITLE="[B2bua-users] how to do AUth for Framed-IP-Address">manjula_55 at yahoo.com
+       </A><BR>
+    <I>Tue Feb 26 16:26:58 CET 2008</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000038.html">[B2bua-users] how to do AUth for Framed-IP-Address
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#37">[ date ]</a>
+              <a href="thread.html#37">[ thread ]</a>
+              <a href="subject.html#37">[ subject ]</a>
+              <a href="author.html#37">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi
+
+I am using  asterisk b2bua  with my existing radius
+based billing backend and asterisk box. Its a really
+nice software. Thank you Mike !!
+
+THe system works fine for Enduser Accounts. However
+when a call is authenticated from another SIP proxy,
+b2bua tries User-Name auth for each call and does not 
+auth for the Framed-IP-Address.
+
+How do i make it to auth ONLY for the IP address?
+
+Note: the radius+billing work ok for other auth
+requests that come from h323 GK for Framed-IP-Address
+Authentication.
+
+
+Here is the auth packet (system tries to find user 113
+and fails auth)
+        NAS-Port-Type = Virtual
+        h323-gw-id = &quot;xxxxxxxx&quot;
+        Service-Type = Login-User
+        Called-Station-Id = &quot;1614#6139888484848&quot;
+        Cisco-NAS-Port = &quot;SIP/1.1.1.1-b7a2eca8&quot;
+        h323-call-type = &quot;VoIP&quot;
+        h323-call-origin = &quot;originate&quot;
+        NAS-IP-Address = 2.2.2.2
+        h323-conf-id =
+&quot;<A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">702b0fad4894cfb6070c6c8549d3c3ed at 1.1.1.1</A>&quot;
+        Cisco-Call-Type = &quot;VoIP&quot;
+        Calling-Station-Id = &quot;113&quot;
+        Cisco-AVPair =
+&quot;call-codec=g729;useragent=Asterisk PBX;&quot;
+        User-Name = &quot;113&quot;
+        NAS-Identifier = &quot;xxxxxxxx&quot;
+        User-Password = &quot;yyyy&quot;
+        Framed-IP-Address = 1.1.1.1
+        NAS-Port = 5060
+        Client-IP-Address = 127.0.0.1
+
+
+
+
+Here is a auth packet thats from the working h323 gk.
+(auth works only for Framed-ip-address in this case,
+and the username 122 is ignored)
+
+       User-Name = &quot;122&quot;
+        NAS-IP-Address = 3.3.3.3
+        NAS-Identifier = &quot;gk1&quot;
+        NAS-Port-Type = Virtual
+        Service-Type = Login-User
+        Framed-IP-Address = 4.4.4.4
+        Calling-Station-Id = &quot;122&quot;
+        Called-Station-Id = &quot;606#932222234&quot;
+        h323-conf-id = &quot;6E4FB368 82DEDC11 BAD9000E
+2E6A872A&quot;
+        h323-call-origin = &quot;originate&quot;
+        h323-call-type = &quot;VoIP&quot;
+        h323-gw-id = &quot;gk1&quot;
+        User-Password = &quot;yyyy&quot;
+        Client-IP-Address = 127.0.0.1
+
+
+
+
+
+      ____________________________________________________________________________________
+Be a better friend, newshound, and 
+know-it-all with Yahoo! Mobile.  Try it now.  <A HREF="http://mobile.yahoo.com/;_ylt=Ahu06i62sR8HDtDypao8Wcj9tAcJ">http://mobile.yahoo.com/;_ylt=Ahu06i62sR8HDtDypao8Wcj9tAcJ</A> 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000038.html">[B2bua-users] how to do AUth for Framed-IP-Address
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#37">[ date ]</a>
+              <a href="thread.html#37">[ thread ]</a>
+              <a href="subject.html#37">[ subject ]</a>
+              <a href="author.html#37">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/b2bua-users">More information about the B2bua-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,56 @@
+From rosadesantis at hotmail.com  Thu May 10 23:55:22 2007
+From: rosadesantis at hotmail.com (Rosa De Santis)
+Date: Thu, 10 May 2007 21:55:22 +0000
+Subject: [B2bua-users] Authentication
+Message-ID: <BAY123-W168F89AE8CAD42E5E678A5D33A0@phx.gbl>
+
+
+Hi list.
+What modifications do I have to do to b2bua's code to make authentication via radius to a billing server?
+Any suggestion please???
+
+Thanks, Rosa.
+
+_________________________________________________________________
+Descubre Live.com - tu propia p?gina de inicio, personalizada para ver r?pidamente todo lo que te interesa en un mismo sitio.
+http://www.live.com/getstarted
+
+From mike at yes.net.ua  Wed May 16 11:26:02 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Wed, 16 May 2007 12:26:02 +0300
+Subject: [B2bua-users] Authentication
+In-Reply-To: <BAY123-W168F89AE8CAD42E5E678A5D33A0@phx.gbl>
+References: <BAY123-W168F89AE8CAD42E5E678A5D33A0@phx.gbl>
+Message-ID: <765197679.20070516122602@yes.net.ua>
+
+Hello Rosa,
+
+Just put your radius servers in config.pl as it described inside this
+file.
+
+Friday, May 11, 2007 12:55:22 AM, you wrote:
+
+RDS> Hi list.
+RDS> What modifications do I have to do to b2bua's code to make
+RDS> authentication via radius to a billing server?
+RDS> Any suggestion please???
+RDS> Thanks, Rosa.
+
+--
+Mike Tkachuk
+
+
+
+From sirphanduc at gmail.com  Tue May 22 09:18:00 2007
+From: sirphanduc at gmail.com (Phan Van Duc)
+Date: Tue, 22 May 2007 14:18:00 +0700
+Subject: [B2bua-users] Help me!!!!!!!!!!!
+Message-ID: <f5962c020705220018n758639cdu4352938763e58c5f@mail.gmail.com>
+
+I want to make call between two sip phone have registered with Ser. I using
+asterisk-b2bua for accounting. Can you guide me to make config file?
+Thanks
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/b2bua-users/attachments/20070522/f861626e/attachment.html>
+

@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [B2bua-users] *b2bua not cutting off the call when credit goes	to zero
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/b2bua-users/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20%2Ab2bua%20not%20cutting%20off%20the%20call%20when%20credit%20goes%0A%09to%20zero&In-Reply-To=%3C1037783020.20070215104744%40yes.net.ua%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000001.html">
+   <LINK REL="Next"  HREF="000004.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[B2bua-users] *b2bua not cutting off the call when credit goes	to zero</H1>
+    <B>Mike Tkachuk</B> 
+    <A HREF="mailto:b2bua-users%40lists.berlios.de?Subject=Re%3A%20%5BB2bua-users%5D%20%2Ab2bua%20not%20cutting%20off%20the%20call%20when%20credit%20goes%0A%09to%20zero&In-Reply-To=%3C1037783020.20070215104744%40yes.net.ua%3E"
+       TITLE="[B2bua-users] *b2bua not cutting off the call when credit goes	to zero">mike at yes.net.ua
+       </A><BR>
+    <I>Thu Feb 15 09:47:44 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000001.html">[B2bua-users] *b2bua not cutting off the call when credit goes to	zero
+</A></li>
+        <LI>Next message: <A HREF="000004.html">[B2bua-users] *b2bua not cutting off the call when credit goes	to zero
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3">[ date ]</a>
+              <a href="thread.html#3">[ thread ]</a>
+              <a href="subject.html#3">[ subject ]</a>
+              <a href="author.html#3">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello manjula,
+
+ For *B2BUA the correct way of returning a session timeout is using a
+ Session-Timeout attribute, not h323-credit-time.
+
+Thursday, February 15, 2007 10:26:17 AM, you wrote:
+
+mh&gt; Hi
+
+mh&gt; I am using b2bua-0.2.0b2 with  asterisk-1.2.11. 
+mh&gt; Authentication, Autherization and accounting is
+mh&gt; working ok. 
+mh&gt;  However we have seen that calls do not get cut off
+mh&gt; when credit goes minus.
+
+mh&gt; I can see radius sending correct Auth-reply
+
+mh&gt; Thu Feb 15 08:03:08 2007
+mh&gt;         h323-credit-time = &quot;h323-credit-time=60&quot;
+mh&gt;         h323-credit-amount = &quot;h323-credit-amount=0.01&quot;
+mh&gt;         h323-currency = &quot;h323-currency=USD&quot;
+mh&gt;         h323-billing-model = &quot;h323-billing-model=2&quot;
+mh&gt;         h323-return-code = &quot;h323-return-code=0&quot;
+mh&gt;         Timestamp = 1171526588
+
+
+mh&gt; Can anyone suggest me a method to troubleshoot what's
+mh&gt; wrong ?
+
+mh&gt; Thanks in advance
+
+mh&gt; Manjula Hettiarachchi
+
+
+mh&gt;  
+mh&gt; ____________________________________________________________________________________
+mh&gt; Now that's room service!  Choose from over 150,000 hotels
+mh&gt; in 45,000 destinations on Yahoo! Travel to find your fit.
+mh&gt; <A HREF="http://farechase.yahoo.com/promo-generic-14795097">http://farechase.yahoo.com/promo-generic-14795097</A>
+mh&gt; _______________________________________________
+mh&gt; B2bua-users mailing list
+mh&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">B2bua-users at lists.berlios.de</A>
+mh&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/b2bua-users">https://lists.berlios.de/mailman/listinfo/b2bua-users</A>
+
+
+--
+Mike Tkachuk
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000001.html">[B2bua-users] *b2bua not cutting off the call when credit goes to	zero
+</A></li>
+	<LI>Next message: <A HREF="000004.html">[B2bua-users] *b2bua not cutting off the call when credit goes	to zero
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3">[ date ]</a>
+              <a href="thread.html#3">[ thread ]</a>
+              <a href="subject.html#3">[ subject ]</a>
+              <a href="author.html#3">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/b2bua-users">More information about the B2bua-users
+mailing list</a><br>
+</body></html>

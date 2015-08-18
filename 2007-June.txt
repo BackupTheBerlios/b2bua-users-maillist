@@ -1,0 +1,745 @@
+From kro_ser at hotmail.com  Fri Jun  1 19:27:04 2007
+From: kro_ser at hotmail.com (Kro Kamil)
+Date: Fri, 1 Jun 2007 20:27:04 +0300
+Subject: [B2bua-users] b2bua with ser
+Message-ID: <BAY119-W20C5C0D06161A5433B27B2822C0@phx.gbl>
+
+
+I want to use B2bua with openser and I want make a dynamic routing, that means I want to ask the database to which gateway I may send the call. normally that can be done by openser. but since b2bua is on the way between openser and gateway, looks like b2bua should ask the database and send to the appropriate gateway. Instead of doing this can I i use the following scenario?
+ 
+openser->asterisk b2bua->openser->pstn gateway
+ 
+thanks for your help.
+_________________________________________________________________
+Live.com'u deneyin - h?zl? ve ki?iselle?tirilmi? giri? sayfan?zla istedi?iniz her ?ey tek bir yerde.
+http://www.live.com/getstarted
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/b2bua-users/attachments/20070601/5797494f/attachment.html>
+
+From mike at yes.net.ua  Mon Jun  4 12:26:39 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Mon, 4 Jun 2007 13:26:39 +0300
+Subject: [B2bua-users] b2bua with ser
+In-Reply-To: <BAY119-W20C5C0D06161A5433B27B2822C0@phx.gbl>
+References: <BAY119-W20C5C0D06161A5433B27B2822C0@phx.gbl>
+Message-ID: <897973466.20070604132639@yes.net.ua>
+
+Hello Kro,
+
+ There is no radius based routing in B2BUA yet.
+ You can use scenario that you described - just add your SER server as
+ peer in *b2bua config.pl
+
+Friday, June 1, 2007 8:27:04 PM, you wrote:
+
+KK>   
+KK>  I want to use B2bua with openser and I want make a dynamic
+KK> routing, that means I want to ask the database to which gateway I
+KK> may send the call. normally that can be done by openser. but since
+KK> b2bua is on the way between openser and gateway, looks?like?b2bua
+KK> should ask the database and send to the appropriate gateway.
+KK> Instead of doing this can I i use the following scenario?
+KK>  ?
+KK>  openser->asterisk b2bua->openser->pstn gateway
+KK>  ?
+KK>  thanks for your help.
+
+
+--
+Mike Tkachuk
+
+
+
+From mavillar at redvoiss.net  Mon Jun  4 22:25:54 2007
+From: mavillar at redvoiss.net (Miguel Angel Villar)
+Date: Mon, 4 Jun 2007 16:25:54 -0400
+Subject: [B2bua-users] Acct-Delay-Time
+Message-ID: <C92D4A34C6B8FC44A10451D881EE1BE7E41840@marantz.magenta.local>
+
+Hi Mike.
+   I'd been using B2BUA 0.1.2 on my asterisk 1.0.6 for about 2 years and it worked perfect all this time. For that version (0.1.2) I modified the behavior of the Acct-Delay-Time because B2BUA was not using the field correctly. Your code use this field to indicate the answer delay time of calls, but this field should be used to indicate RADIUS server how many seconds the client has been trying to send the record.
+
+http://www.gnu.org/software/radius/manual/html_node/radius_211.html
+
+  I just installed a new asterisk (1.4.2) so I patched with B2BUA (0.3.0b).... yes!, I'm a fan of your patch :-)
+  I still see that the new version uses the Acct-Delay-Time in a wrong way so I modified the code again. Maybe you want to apply my mod for future releases and use Acct-Delay-Time as defined, my mod is very simple... take a look to the diff output for the 3 modified files:
+
+[root at server b2bua]# diff b2bua.pl /usr/src/asterisk-b2bua-0.3.0b/b2bua.pl 
+180d179
+< $attributes{'Acct-Delay-Time'} = 0;
+214a214
+> $acct_attributes{'Acct-Delay-Time'} = 0;
+219c219
+
+[root at server b2bua]# diff include/library.pm /usr/src/asterisk-b2bua-0.3.0b/include/library.pm 
+264c264
+<   $attributes{'Acct-Delay-Time'} = 0;
+---
+>   $attributes{'Acct-Delay-Time'} = $delay_time;
+
+[root at server b2bua]# diff include/radius.pm /usr/src/asterisk-b2bua-0.3.0b/include/radius.pm 
+130d129
+<     $attributes->{'Acct-Delay-Time'} = 0;
+147,151d145
+<                         $attributes->{'Acct-Delay-Time'} = $attributes->{'Acct-Delay-Time'} + $server->[3];
+<                         # Clearing old attributes from radius interface
+<                         $self ->clear_attributes();
+<                         # Adding attributes to radius packet
+<                         while ( my ($key, $value) = each(%{$attributes}) ){ $self->add_attributes({ Name => $key, Value => $value }); } 
+
+   I hope that you find this helpfull. Thanks for all your great work.
+
+Regards.
+Miguel.-
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/b2bua-users/attachments/20070604/0d99f00a/attachment.html>
+
+From mavillar at redvoiss.net  Mon Jun  4 21:41:11 2007
+From: mavillar at redvoiss.net (Miguel Angel Villar)
+Date: Mon, 4 Jun 2007 15:41:11 -0400
+Subject: [B2bua-users] Acct-Delay-Time
+Message-ID: <C92D4A34C6B8FC44A10451D881EE1BE7E4183D@marantz.magenta.local>
+
+Hi Mike.
+   I'd been using B2BUA 0.1.2 on my asterisk 1.0.6 for about 2 years and it worked perfect all this time. For that version (0.1.2) I modified the behavior of the Acct-Delay-Time because B2BUA was not using the field correctly. Your code use this field to indicate the answer delay time of calls, but this field should be used to indicate RADIUS server how many seconds the client has been trying to send the record.
+
+http://www.gnu.org/software/radius/manual/html_node/radius_211.html
+
+  I just installed a new asterisk (1.4.2) so I patched with B2BUA (0.3.0b).... yes!, I'm a fan of your patch :-)
+  I still see that the new version uses the Acct-Delay-Time in a wrong way so I modified the code again. Maybe you want to apply my mod for future releases and use Acct-Delay-Time as defined, my mod is very simple... take a look to the diff output for the 3 modified files:
+
+[root at server b2bua]# diff b2bua.pl /usr/src/asterisk-b2bua-0.3.0b/b2bua.pl 
+180d179
+< $attributes{'Acct-Delay-Time'} = 0;
+214a214
+> $acct_attributes{'Acct-Delay-Time'} = 0;
+219c219
+
+[root at server b2bua]# diff include/library.pm /usr/src/asterisk-b2bua-0.3.0b/include/library.pm 
+264c264
+<   $attributes{'Acct-Delay-Time'} = 0;
+---
+>   $attributes{'Acct-Delay-Time'} = $delay_time;
+
+[root at server b2bua]# diff include/radius.pm /usr/src/asterisk-b2bua-0.3.0b/include/radius.pm 
+130d129
+<     $attributes->{'Acct-Delay-Time'} = 0;
+147,151d145
+<                         $attributes->{'Acct-Delay-Time'} = $attributes->{'Acct-Delay-Time'} + $server->[3];
+<                         # Clearing old attributes from radius interface
+<                         $self ->clear_attributes();
+<                         # Adding attributes to radius packet
+<                         while ( my ($key, $value) = each(%{$attributes}) ){ $self->add_attributes({ Name => $key, Value => $value }); } 
+
+   I hope that you find this helpfull. Thanks for all your great work.
+
+Regards.
+Miguel.-
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/b2bua-users/attachments/20070604/e9e9da0c/attachment.html>
+
+From mike at yes.net.ua  Tue Jun  5 11:34:02 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Tue, 5 Jun 2007 12:34:02 +0300
+Subject: [B2bua-users] Acct-Delay-Time
+In-Reply-To: <C92D4A34C6B8FC44A10451D881EE1BE7E41840@marantz.magenta.local>
+References: <C92D4A34C6B8FC44A10451D881EE1BE7E41840@marantz.magenta.local>
+Message-ID: <1487181857.20070605123402@yes.net.ua>
+
+Hello Miguel,
+
+Thanks for the note.
+Can you suggest another attribute to indicate answer delay of the
+call?
+
+Monday, June 4, 2007 11:25:54 PM, you wrote:
+
+MAV>    
+MAV>    
+MAV> Hi Mike.  
+MAV> ?? I'd been using B2BUA 0.1.2 on my asterisk 1.0.6 for about 2
+MAV> years and it worked perfect all this time. For that version
+MAV> (0.1.2) I modified the behavior of the Acct-Delay-Time because
+MAV> B2BUA was not using the field correctly. Your code use this field
+MAV> to indicate the answer delay time of calls, but this field should
+MAV> be used to indicate RADIUS server how many seconds the client has been trying to send the record.
+MAV>   
+MAV> http://www.gnu.org/software/radius/manual/html_node/radius_211.html 
+MAV>   
+MAV> ? I just installed a new asterisk (1.4.2) so I patched with
+MAV> B2BUA (0.3.0b).... yes!, I'm a fan of your patch :-)  
+MAV> ? I still see that the new version uses the Acct-Delay-Time in a
+MAV> wrong way so I modified the code again. Maybe you want to apply
+MAV> my mod for future releases and use Acct-Delay-Time as defined, my
+MAV> mod is very simple... take a look to the diff output for the 3 modified files:
+MAV>   
+MAV> [root at server b2bua]# diff b2bua.pl
+MAV> /usr/src/asterisk-b2bua-0.3.0b/b2bua.pl   
+MAV> 180d179  
+MAV> < $attributes{'Acct-Delay-Time'} = 0;  
+MAV> 214a214  
+>> $acct_attributes{'Acct-Delay-Time'} = 0;  
+MAV> 219c219 
+MAV>   
+MAV> [root at server b2bua]# diff include/library.pm
+MAV> /usr/src/asterisk-b2bua-0.3.0b/include/library.pm   
+MAV> 264c264  
+MAV> <?? $attributes{'Acct-Delay-Time'} = 0;  
+MAV> ---  
+>>?? $attributes{'Acct-Delay-Time'} = $delay_time; 
+MAV>   
+MAV> [root at server b2bua]# diff include/radius.pm
+MAV> /usr/src/asterisk-b2bua-0.3.0b/include/radius.pm   
+MAV> 130d129  
+MAV> <???? $attributes->{'Acct-Delay-Time'} = 0;  
+MAV> 147,151d145  
+MAV> <???????????????????????? $attributes->{'Acct-Delay-Time'} =
+MAV> $attributes->{'Acct-Delay-Time'} + $server->[3];  
+MAV> <???????????????????????? # Clearing old attributes from radius interface
+MAV> <???????????????????????? $self ->clear_attributes();  
+MAV> <???????????????????????? # Adding attributes to radius packet  
+MAV> <???????????????????????? while ( my ($key, $value) =
+MAV> each(%{$attributes}) ){ $self->add_attributes({ Name => $key, Value => $value }); }
+MAV>   
+MAV> ?? I hope that you find this helpfull. Thanks for all your great work.
+MAV>   
+MAV> Regards.  
+MAV> Miguel.- 
+MAV>   
+MAV>    
+
+
+--
+Mike Tkachuk
+
+
+
+From mavillar at redvoiss.net  Tue Jun  5 15:56:28 2007
+From: mavillar at redvoiss.net (Miguel Angel Villar)
+Date: Tue, 5 Jun 2007 09:56:28 -0400
+Subject: [B2bua-users] Acct-Delay-Time
+In-Reply-To: <1487181857.20070605123402@yes.net.ua>
+Message-ID: <C92D4A34C6B8FC44A10451D881EE1BE7E41841@marantz.magenta.local>
+
+Hi Mike
+   Some time ago I looked for an attribute for this but I didn't have luck, so by now I added this info at the end of the Cisco-AVPair attribute, take a look at my diff of library.pm:
+
+[root at server b2bua]# diff library.pm /usr/src/asterisk-b2bua-0.3.0b/include/library.pm 
+264c264
+<   $attributes{'Acct-Delay-Time'} = 0;
+---
+>   $attributes{'Acct-Delay-Time'} = $delay_time;
+269c269
+<   $attributes{'h323-setup-time'} = convert_SecToDate($currenttime - $call_length);
+---
+>   $attributes{'h323-setup-time'} = convert_SecToDate($currenttime - $call_length - $delay_time);
+273d272
+<   $attributes{'Cisco-AVPair'} .= "answer-delay=$delay_time;";
+
+   The changes:
+Line 264: related to Acct-Delay-Time mod.
+Line 269: changed because h323-setup-time was defined wrong (please check it). 
+Line 273: addeed to include aswer delay in Cisco-AVPair attribute. 
+
+   I'll let you know if I find some attribute specially designed for this.
+
+Regards.
+Miguel.-
+
+-----Mensaje original-----
+De: b2bua-users-bounces at lists.berlios.de
+[mailto:b2bua-users-bounces at lists.berlios.de]En nombre de Mike Tkachuk
+Enviado el: Martes, 05 de Junio de 2007 5:34
+Para: Miguel Angel Villar
+CC: b2bua-users at lists.berlios.de
+Asunto: Re: [B2bua-users] Acct-Delay-Time
+
+
+Hello Miguel,
+
+Thanks for the note.
+Can you suggest another attribute to indicate answer delay of the
+call?
+
+Monday, June 4, 2007 11:25:54 PM, you wrote:
+
+MAV>    
+MAV>    
+MAV> Hi Mike.  
+MAV> ?? I'd been using B2BUA 0.1.2 on my asterisk 1.0.6 for about 2
+MAV> years and it worked perfect all this time. For that version
+MAV> (0.1.2) I modified the behavior of the Acct-Delay-Time because
+MAV> B2BUA was not using the field correctly. Your code use this field
+MAV> to indicate the answer delay time of calls, but this field should
+MAV> be used to indicate RADIUS server how many seconds the client has been trying to send the record.
+MAV>   
+MAV> http://www.gnu.org/software/radius/manual/html_node/radius_211.html 
+MAV>   
+MAV> ? I just installed a new asterisk (1.4.2) so I patched with
+MAV> B2BUA (0.3.0b).... yes!, I'm a fan of your patch :-)  
+MAV> ? I still see that the new version uses the Acct-Delay-Time in a
+MAV> wrong way so I modified the code again. Maybe you want to apply
+MAV> my mod for future releases and use Acct-Delay-Time as defined, my
+MAV> mod is very simple... take a look to the diff output for the 3 modified files:
+MAV>   
+MAV> [root at server b2bua]# diff b2bua.pl
+MAV> /usr/src/asterisk-b2bua-0.3.0b/b2bua.pl   
+MAV> 180d179  
+MAV> < $attributes{'Acct-Delay-Time'} = 0;  
+MAV> 214a214  
+>> $acct_attributes{'Acct-Delay-Time'} = 0;  
+MAV> 219c219 
+MAV>   
+MAV> [root at server b2bua]# diff include/library.pm
+MAV> /usr/src/asterisk-b2bua-0.3.0b/include/library.pm   
+MAV> 264c264  
+MAV> <?? $attributes{'Acct-Delay-Time'} = 0;  
+MAV> ---  
+>>?? $attributes{'Acct-Delay-Time'} = $delay_time; 
+MAV>   
+MAV> [root at server b2bua]# diff include/radius.pm
+MAV> /usr/src/asterisk-b2bua-0.3.0b/include/radius.pm   
+MAV> 130d129  
+MAV> <???? $attributes->{'Acct-Delay-Time'} = 0;  
+MAV> 147,151d145  
+MAV> <???????????????????????? $attributes->{'Acct-Delay-Time'} =
+MAV> $attributes->{'Acct-Delay-Time'} + $server->[3];  
+MAV> <???????????????????????? # Clearing old attributes from radius interface
+MAV> <???????????????????????? $self ->clear_attributes();  
+MAV> <???????????????????????? # Adding attributes to radius packet  
+MAV> <???????????????????????? while ( my ($key, $value) =
+MAV> each(%{$attributes}) ){ $self->add_attributes({ Name => $key, Value => $value }); }
+MAV>   
+MAV> ?? I hope that you find this helpfull. Thanks for all your great work.
+MAV>   
+MAV> Regards.  
+MAV> Miguel.- 
+MAV>   
+MAV>    
+
+
+--
+Mike Tkachuk
+
+_______________________________________________
+B2bua-users mailing list
+B2bua-users at lists.berlios.de
+https://lists.berlios.de/mailman/listinfo/b2bua-users
+
+
+From kro_ser at hotmail.com  Thu Jun  7 11:42:51 2007
+From: kro_ser at hotmail.com (Kro Kamil)
+Date: Thu, 7 Jun 2007 12:42:51 +0300
+Subject: [B2bua-users] 404 not found
+Message-ID: <BAY119-W7C400454881F37D30451782260@phx.gbl>
+
+
+Hi,
+ 
+I have installed perl md5 module, asterisk perl module and asterisk b2bua
+ 
+I configured sip.conf and extensions.conf as described in the INSTALL file
+ 
+I made a pstn call from ser and got 404 not found from asterisk.
+ 
+then I looked at this post
+ 
+https://lists.berlios.de/pipermail/b2bua-users/2005-March/000034.html
+ 
+I first added definitons in the config files but again I got 404
+ 
+I deleted definitions in the install file, just tried to use the latter, I again got 404.
+ 
+Now, what may be the problem?
+ 
+Asterisk looks like working fine, not giving errors.
+ 
+thanks
+ 
+Kro
+_________________________________________________________________
+Live.com'u deneyin - h?zl? ve ki?iselle?tirilmi? giri? sayfan?zla istedi?iniz her ?ey tek bir yerde.
+http://www.live.com/getstarted
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/b2bua-users/attachments/20070607/ebe7823d/attachment.html>
+
+From mike at yes.net.ua  Fri Jun  8 15:36:14 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Fri, 8 Jun 2007 16:36:14 +0300
+Subject: [B2bua-users] 404 not found
+In-Reply-To: <BAY119-W7C400454881F37D30451782260@phx.gbl>
+References: <BAY119-W7C400454881F37D30451782260@phx.gbl>
+Message-ID: <1909249596.20070608163614@yes.net.ua>
+
+Hello Kro,
+
+Probably you have misconfiguration in your sip.conf or extensions.conf
+- asterisk cannot find dialplan extension for incoming SIP peer.
+
+Thursday, June 7, 2007 12:42:51 PM, you wrote:
+
+KK>   
+KK>  Hi,
+KK>  ?
+KK>  I have installed perl md5 module, asterisk perl module and asterisk b2bua
+KK>  ?
+KK>  I configured sip.conf and extensions.conf as described in the INSTALL file
+KK>  ?
+KK>  I made a pstn call from ser and got 404 not found from asterisk.
+KK>  ?
+KK>  then I looked at this post
+KK>  ?
+KK>  https://lists.berlios.de/pipermail/b2bua-users/2005-March/000034.html
+KK>  ?
+KK>  I first added definitons in the config files but again I got 404
+KK>  ?
+KK>  I deleted definitions in the install file, just tried to use the latter, I again got 404.
+KK>  ?
+KK>  Now, what may be the problem?
+KK>  ?
+KK>  Asterisk looks like working fine, not giving errors.
+KK>  ?
+KK>  thanks
+KK>  ?
+KK>  Kro
+
+
+KK> Live.com'u deneyin - h?zl? ve ki?iselle?tirilmi? giri? sayfan?zla
+KK> istedi?iniz her ?ey tek bir yerde. tek bir yerde.
+KK>   
+
+
+--
+Mike Tkachuk
+
+
+
+From kro_ser at hotmail.com  Fri Jun  8 17:57:54 2007
+From: kro_ser at hotmail.com (Kro Kamil)
+Date: Fri, 8 Jun 2007 18:57:54 +0300
+Subject: [B2bua-users] 404 not found
+Message-ID: <BAY119-W5832E2AFD36A787AADED982250@phx.gbl>
+
+
+Hello,
+ 
+I created the config files with make samples.
+ 
+then I added your definitions.
+ 
+first I added the ones in INSTALL file,
+ 
+then I deleted them and added:
+ 
+sip.conf :[gncsersip1-in]type=peerhost=10.20.30.40context=sip-indisallow=allallow=g723.1allow=g729allow=gsmAnd in extensions.conf:[sip-in]exten => _X.,1,DeadAgi(/usr/local/b2bua/agi.pl)exten => _X.,2,Hangup()
+ 
+then I added both.
+ 
+but none of them worked.
+ 
+Can you tell me the problem?
+Thanks
+ 
+Kro
+ 
+ 
+_________________________________________________________________
+Kendinizi ifade edin: giri? sayfan?z? Live.com ile istedi?iniz bi?imde tasarlay?n.
+http://www.live.com/getstarted
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/b2bua-users/attachments/20070608/efb542bd/attachment.html>
+
+From kro_ser at hotmail.com  Sat Jun  9 09:38:18 2007
+From: kro_ser at hotmail.com (Kro Kamil)
+Date: Sat, 9 Jun 2007 10:38:18 +0300
+Subject: [B2bua-users] 404 not found
+Message-ID: <BAY119-W2888A30E72C560276796082240@phx.gbl>
+
+
+Hi,
+ 
+It is already my proxy's original address :) It was just an example. I'd better paste my configs here. As you can see definitions except [sip-in] parts are all default configurtions that come with make samples.
+ 
+thanks again :)
+Kro
+ 
+/******************************sip.conf****************************/
+[general];context=default ;allowguest=no  allowoverlap=no  ;allowtransfer=no    ;realm=mydomain.tld  ;bindport=5060  ;bindaddr=0.0.0.0 ;srvlookup=yes  ;  disallow=all;  allow=ulaw;  allow=alaw  ;  allow=g729;[sip_proxy];type=peer;context=from-fwd;host=88.248.71.3;canreinvite=no
+;[sip_proxy-out];type=peer             ;secret=guessit;username=yourusername   ;fromuser=yourusername   ;fromdomain=provider.sip.domain ;host=box.provider.com;usereqphone=yes   ;call-limit=5    ;outboundproxy=proxy.provider.domain;port=80    
+[gncsersip1-in]type=peerhost=88.248.71.3context=sip-indisallow=allallow=g723.1allow=g729allow=gsm
+/**********************end of sip.conf***********************/
+ 
+/**********************extensions.conf***********************/
+[general]static=yeswriteprotect=noclearglobalvars=no
+[globals]CONSOLE=Console/dspIAXINFO=guest  TRUNK=Zap/g2  TRUNKMSD=1  switch => DUNDi/e164exten => s,1,Goto(${ARG1},1)include => dundi-e164-lookup
+[iaxtel700]exten => _91700XXXXXXX,1,Dial(IAX2/${GLOBAL(IAXINFO)}@iaxtel.com/${EXTEN:1}@iaxtel)[iaxprovider][trunkint]exten => _9011.,1,Macro(dundi-e164,${EXTEN:4})exten => _9011.,n,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})[trunkld]exten => _91NXXNXXXXXX,1,Macro(dundi-e164,${EXTEN:1})exten => _91NXXNXXXXXX,n,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+[trunklocal]exten => _9NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+[trunktollfree]exten => _91800NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})exten => _91888NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})exten => _91877NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})exten => _91866NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+[international]ignorepat => 9include => longdistanceinclude => trunkint
+[longdistance]ignorepat => 9include => localinclude => trunkld
+[local]ignorepat => 9include => defaultinclude => trunklocalinclude => iaxtel700include => trunktollfreeinclude => iaxprovider
+include => parkedcalls
+[macro-trunkdial]exten => s,1,Dial(${ARG1})exten => s,n,Goto(s-${DIALSTATUS},1)exten => s-NOANSWER,1,Hangupexten => s-BUSY,1,Hangupexten => _s-.,1,NoOp
+[macro-stdexten];exten => s,1,Dial(${ARG2},20)  exten => s,2,Goto(s-${DIALSTATUS},1)  exten => s-NOANSWER,1,Voicemail(${ARG1},u) exten => s-NOANSWER,2,Goto(default,s,1)  exten => s-BUSY,1,Voicemail(${ARG1},b)  exten => s-BUSY,2,Goto(default,s,1)  exten => _s-.,1,Goto(s-NOANSWER,1)  exten => a,1,VoicemailMain(${ARG1})  
+[macro-stdPrivacyexten];exten => s,1,Dial(${ARG2},20|p)   exten => s,2,Goto(s-${DIALSTATUS},1)  exten => s-NOANSWER,1,Voicemail(${ARG1},u) exten => s-NOANSWER,2,Goto(default,s,1)  exten => s-BUSY,1,Voicemail(${ARG1},b)  exten => s-BUSY,2,Goto(default,s,1)  exten => s-DONTCALL,1,Goto(${ARG3},s,1)  exten => s-TORTURE,1,Goto(${ARG4},s,1)  exten => _s-.,1,Goto(s-NOANSWER,1)  exten => a,1,VoicemailMain(${ARG1})  
+[macro-page];
+exten => s,1,ChanIsAvail(${ARG1}|js)exten => s,n,GoToIf([${AVAILSTATUS} = "1"]?autoanswer:fail)exten => s,n(autoanswer),Set(_ALERT_INFO="RA")exten => s,n,SIPAddHeader(Call-Info: Answer-After=0)exten => s,n,NoOp()exten => s,n,Dial(${ARG1}||)exten => s,n(fail),Hangup
+[demo]exten => s,1,Wait(1)   exten => s,n,Answer   exten => s,n,Set(TIMEOUT(digit)=5) exten => s,n,Set(TIMEOUT(response)=10) exten => s,n(restart),BackGround(demo-congrats) exten => s,n(instruct),BackGround(demo-instruct)exten => s,n,WaitExten   exten => 2,1,BackGround(demo-moreinfo) exten => 2,n,Goto(s,instruct)exten => 3,1,Set(LANGUAGE()=fr)  exten => 3,n,Goto(s,restart)  exten => 1000,1,Goto(default,s,1)exten => 1234,1,Playback(transfer,skip)exten => 1234,n,Macro(stdexten,1234,${GLOBAL(CONSOLE)})exten => 1235,1,Voicemail(1234,u) exten => 1236,1,Dial(Console/dsp) exten => 1236,n,Voicemail(1234,b) exten => #,1,Playback(demo-thanks) exten => #,n,Hangup  exten => t,1,Goto(#,1) exten => i,1,Playback(invalid)  exten => 500,1,Playback(demo-abouttotry)exten => 500,n,Dial(IAX2/guest at misery.digium.com/s at default)exten => 500,n,Playback(demo-nogo)exten => 500,n,Goto(s,6)  exten => 600,1,Playback(demo-echotest) exten => 600,n,Echo   exten => 600,n,Playback(demo-echodone) exten => 600,n,Goto(s,6)  exten => 76245,1,Macro(page,SIP/Grandstream1)exten => _7XXX,1,Macro(page,SIP/${EXTEN})exten => 7999,1,Set(TIMEOUT(absolute)=60)exten => 7999,2,Page(Local/Grandstream1 at page&Local/Xlite1 at page&Local/1234 at page/n|d)exten => 8500,1,VoicemailMainexten => 8500,n,Goto(s,6)
+[page]exten => _X.,1,Macro(page,SIP/${EXTEN})
+[default]
+[sip-in]exten => _X.,1,DeadAgi(/root/asterisk-b2bua-0.3.0b/b2bua.pl)exten => _X.,2,Hangup()
+/**********************end of extensions.conf***********************/
+> Date: Fri, 8 Jun 2007 19:20:50 +0300> From: mike at yes.net.ua> To: kro_ser at hotmail.com> Subject: Re[2]: [B2bua-users] 404 not found> > Hello Kro,> > Change host=10.20.30.40 to your actual address of proxy.> > Friday, June 8, 2007 6:57:54 PM, you wrote:> 
+_________________________________________________________________
+Live.com'u deneyin - h?zl? ve ki?iselle?tirilmi? giri? sayfan?zla istedi?iniz her ?ey tek bir yerde.
+http://www.live.com/getstarted
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/b2bua-users/attachments/20070609/83054915/attachment.html>
+
+From mike at yes.net.ua  Sat Jun  9 11:27:28 2007
+From: mike at yes.net.ua (Mike Tkachuk)
+Date: Sat, 9 Jun 2007 12:27:28 +0300
+Subject: [B2bua-users] 404 not found
+In-Reply-To: <BAY119-W2888A30E72C560276796082240@phx.gbl>
+References: <BAY119-W2888A30E72C560276796082240@phx.gbl>
+Message-ID: <1848040116.20070609122728@yes.net.ua>
+
+Hello Kro,
+
+ Maybe your proxy forwarding not from standard port 5060. Also you can
+ see all necessary debug info by typing "sip debug" in asterisk
+ console.
+
+Saturday, June 9, 2007 10:38:18 AM, you wrote:
+
+KK>   
+KK>  Hi,
+KK>  ?
+KK>  It is already my proxy's original address :) It was just an
+KK> example. I'd better paste my configs here. As you can see
+KK> definitions except [sip-in] parts are all default configurtions that come with make samples.
+KK>  ?
+KK>  thanks again :)
+KK>  Kro
+KK>  ?
+KK>  /******************************sip.conf****************************/
+KK>  [general]
+KK> ;context=default?
+KK> ;allowguest=no??
+KK> allowoverlap=no??
+KK> ;allowtransfer=no????
+KK> ;realm=mydomain.tld??
+KK> ;bindport=5060??
+KK> ;bindaddr=0.0.0.0?
+KK> ;srvlookup=yes??
+KK> ;? disallow=all
+KK> ;? allow=ulaw
+KK> ;? allow=alaw? 
+KK> ;? allow=g729
+KK> ;[sip_proxy]
+KK> ;type=peer
+KK> ;context=from-fwd
+KK> ;host=88.248.71.3
+KK> ;canreinvite=no
+KK>  ;[sip_proxy-out]
+KK> ;type=peer????????? ???
+KK> ;secret=guessit
+KK> ;username=yourusername???
+KK> ;fromuser=yourusername???
+KK> ;fromdomain=provider.sip.domain?
+KK> ;host=box.provider.com
+KK> ;usereqphone=yes???
+KK> ;call-limit=5????
+KK> ;outboundproxy=proxy.provider.domain
+KK> ;port=80????
+KK>  [gncsersip1-in]
+KK> type=peer
+KK> host=88.248.71.3
+KK> context=sip-in
+KK> disallow=all
+KK> allow=g723.1
+KK> allow=g729
+KK> allow=gsm
+KK>  /**********************end of sip.conf***********************/
+
+KK>  ?
+KK>  /**********************extensions.conf***********************/
+KK>  [general]
+KK> static=yes
+KK> writeprotect=no
+KK> clearglobalvars=no
+KK>  [globals]
+KK> CONSOLE=Console/dsp
+KK> IAXINFO=guest??
+KK> TRUNK=Zap/g2??
+KK> TRUNKMSD=1??
+switch =>> DUNDi/e164
+exten =>> s,1,Goto(${ARG1},1)
+include =>> dundi-e164-lookup
+KK>  [iaxtel700]
+exten =>> _91700XXXXXXX,1,Dial(IAX2/${GLOBAL(IAXINFO)}@iaxtel.com/${EXTEN:1}@iaxtel)
+KK> [iaxprovider]
+KK> [trunkint]
+exten =>> _9011.,1,Macro(dundi-e164,${EXTEN:4})
+exten =>> _9011.,n,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+KK> [trunkld]
+exten =>> _91NXXNXXXXXX,1,Macro(dundi-e164,${EXTEN:1})
+exten =>> _91NXXNXXXXXX,n,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+KK>  [trunklocal]
+exten =>> _9NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+KK>  [trunktollfree]
+exten =>> _91800NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+exten =>> _91888NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+exten =>> _91877NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+exten =>> _91866NXXXXXX,1,Dial(${GLOBAL(TRUNK)}/${EXTEN:${GLOBAL(TRUNKMSD)}})
+KK>  [international]
+ignorepat =>> 9
+include =>> longdistance
+include =>> trunkint
+KK>  [longdistance]
+ignorepat =>> 9
+include =>> local
+include =>> trunkld
+KK>  [local]
+ignorepat =>> 9
+include =>> default
+include =>> trunklocal
+include =>> iaxtel700
+include =>> trunktollfree
+include =>> iaxprovider
+KK>  include => parkedcalls
+KK>  [macro-trunkdial]
+exten =>> s,1,Dial(${ARG1})
+exten =>> s,n,Goto(s-${DIALSTATUS},1)
+exten =>> s-NOANSWER,1,Hangup
+exten =>> s-BUSY,1,Hangup
+exten =>> _s-.,1,NoOp
+KK>  [macro-stdexten];
+exten =>> s,1,Dial(${ARG2},20)??
+exten =>> s,2,Goto(s-${DIALSTATUS},1)??
+exten =>> s-NOANSWER,1,Voicemail(${ARG1},u)?
+exten =>> s-NOANSWER,2,Goto(default,s,1)??
+exten =>> s-BUSY,1,Voicemail(${ARG1},b)??
+exten =>> s-BUSY,2,Goto(default,s,1)??
+exten =>> _s-.,1,Goto(s-NOANSWER,1)??
+exten =>> a,1,VoicemailMain(${ARG1})??
+KK>  [macro-stdPrivacyexten];
+exten =>> s,1,Dial(${ARG2},20|p)???
+exten =>> s,2,Goto(s-${DIALSTATUS},1)??
+exten =>> s-NOANSWER,1,Voicemail(${ARG1},u)?
+exten =>> s-NOANSWER,2,Goto(default,s,1)??
+exten =>> s-BUSY,1,Voicemail(${ARG1},b)??
+exten =>> s-BUSY,2,Goto(default,s,1)??
+exten =>> s-DONTCALL,1,Goto(${ARG3},s,1)??
+exten =>> s-TORTURE,1,Goto(${ARG4},s,1)??
+exten =>> _s-.,1,Goto(s-NOANSWER,1)??
+exten =>> a,1,VoicemailMain(${ARG1})??
+KK>  [macro-page];
+KK>  exten => s,1,ChanIsAvail(${ARG1}|js)
+exten =>> s,n,GoToIf([${AVAILSTATUS} = "1"]?autoanswer:fail)
+exten =>> s,n(autoanswer),Set(_ALERT_INFO="RA")
+exten =>> s,n,SIPAddHeader(Call-Info: Answer-After=0)
+exten =>> s,n,NoOp()
+exten =>> s,n,Dial(${ARG1}||)
+exten =>> s,n(fail),Hangup
+KK>  
+KK> [demo]
+exten =>> s,1,Wait(1)???
+exten =>> s,n,Answer???
+exten =>> s,n,Set(TIMEOUT(digit)=5)?
+exten =>> s,n,Set(TIMEOUT(response)=10)?
+exten =>> s,n(restart),BackGround(demo-congrats)?
+exten =>> s,n(instruct),BackGround(demo-instruct)
+exten =>> s,n,WaitExten???
+exten =>> 2,1,BackGround(demo-moreinfo)?
+exten =>> 2,n,Goto(s,instruct)
+exten =>> 3,1,Set(LANGUAGE()=fr)??
+exten =>> 3,n,Goto(s,restart)??
+exten =>> 1000,1,Goto(default,s,1)
+exten =>> 1234,1,Playback(transfer,skip)
+exten =>> 1234,n,Macro(stdexten,1234,${GLOBAL(CONSOLE)})
+exten =>> 1235,1,Voicemail(1234,u)?
+exten =>> 1236,1,Dial(Console/dsp)?
+exten =>> 1236,n,Voicemail(1234,b)?
+exten =>> #,1,Playback(demo-thanks)?
+exten =>> #,n,Hangup??
+exten =>> t,1,Goto(#,1)?
+exten =>> i,1,Playback(invalid)??
+exten =>> 500,1,Playback(demo-abouttotry)
+exten =>> 500,n,Dial(IAX2/guest at misery.digium.com/s at default)
+exten =>> 500,n,Playback(demo-nogo)
+exten =>> 500,n,Goto(s,6)??
+exten =>> 600,1,Playback(demo-echotest)?
+exten =>> 600,n,Echo???
+exten =>> 600,n,Playback(demo-echodone)?
+exten =>> 600,n,Goto(s,6)??
+exten =>> 76245,1,Macro(page,SIP/Grandstream1)
+exten =>> _7XXX,1,Macro(page,SIP/${EXTEN})
+exten =>> 7999,1,Set(TIMEOUT(absolute)=60)
+exten =>> 7999,2,Page(Local/Grandstream1 at page&Local/Xlite1 at page&Local/1234 at page/n|d)
+exten =>> 8500,1,VoicemailMain
+exten =>> 8500,n,Goto(s,6)
+KK>  [page]
+exten =>> _X.,1,Macro(page,SIP/${EXTEN})
+KK>  [default]
+KK>  [sip-in]
+exten =>> _X.,1,DeadAgi(/root/asterisk-b2bua-0.3.0b/b2bua.pl)
+exten =>> _X.,2,Hangup()
+KK>  /**********************end of extensions.conf***********************/
+KK>  
+>> Date: Fri, 8 Jun 2007 19:20:50 +0300
+>> From: mike at yes.net.ua
+>> To: kro_ser at hotmail.com
+>> Subject: Re[2]: [B2bua-users] 404 not found
+>> 
+>> Hello Kro,
+>> 
+>> Change host=10.20.30.40 to your actual address of proxy.
+>> 
+>> Friday, June 8, 2007 6:57:54 PM, you wrote:
+>> 
+
+
+
+KK> MSN Spaces ile web g?nl???n?ze do?rudan e-posta g?nderin.
+KK> F?kralar?, foto?raflar? ve daha fazlas?n? kar??ya y?kleyin. ?cretsiz! ?cretsiz!
+KK>   
+
+
+--
+Mike Tkachuk
+
+
+
+From matus at 1stomni.com  Mon Jun 25 14:45:57 2007
+From: matus at 1stomni.com (Matus Martinak)
+Date: Mon, 25 Jun 2007 14:45:57 +0200
+Subject: [B2bua-users] is this project solution for me ?
+Message-ID: <200706251445.57275.matus@1stomni.com>
+
+Hello, 
+
+i'm searching for solution for following problem:
+
+i have sip phone connected as end user device to provider ( BroadVoice )
+I want to exchange it with pbx unit, i choose sipxpbx which work great except 
+one - it CAN'T connect to my broadvoice account as end user device.
+So basicly i need this:
+
+Broadvoice -- ( registration ) -- B2BUA -- ( trunk ) -- sipxpbx
+
+I need some software which will simulate end user device on one point and sip 
+trunk with all features ( specially call transfers ) on other end.
+
+Is this projection solution for my problem ?
+Thanks for information
+
+Matus
+
+
